@@ -1,5 +1,20 @@
 <section class="section content">
-<h1 class="title is-spaced">Instance Settings</h1>
+<h1 class="title is-spaced">Instance</h1>
+<div class="block">
+<p class="my-1"><b>Version:</b> {{ .Version }}</p>
+<p class="my-1"><b>Default commission:</b> {{ .DefaultCommission }}</p>
+<p class="my-1"><b>Custodial mode:</b> {{ .CustodialMode }}</p>
+<p class="my-1"><b>Registrations allowed:</b> {{ .RegistrationsAlowed }}</p>
+<p class="my-1"><b>Withdrawal period:</b> {{ .WithdrawalTimes }}</p>
+</div>
+
+<div class="block">
+<p class="my-1"><b>Wallet balance:</b> {{ .WalletBalance }} XMR</p>
+<p class="my-1"><b>Total profits:</b> {{ .TotalProfits }}</p>
+<p class="my-1"><b>Total merchants:</b> {{ .TotalMerchants }}</p>
+</div>
+
+<h2 class="title is-spaced">Settings</h2>
 
 <div class="field is-horizontal">
   <div class="field-label">
@@ -61,7 +76,7 @@
 
 <div class="field is-horizontal">
   <div class="field-label">
-    <label class="label">Withdrawal times</label>
+    <label class="label">Withdrawal period</label>
   </div>
   <div class="field-body">
     <div class="field is-narrow">
