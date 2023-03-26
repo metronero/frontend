@@ -20,6 +20,7 @@ func main() {
 	app.Get("/register", controllers.GetRegister)
 	app.Post("/register", controllers.PostRegister)
 	app.Get("/logout", controllers.GetLogout)
+	app.Get("/", controllers.GetLogin)
 
 	app.Use(jwtware.New(jwtware.Config{
 		SigningKey:  []byte(config.JwtSecret),
@@ -35,6 +36,7 @@ func main() {
 	merchant.Get("/dashboard", controllers.MerchantDashboard)
 	merchant.Get("/payments", controllers.MerchantPayments)
 	merchant.Get("/withdrawals", controllers.MerchantWithdrawals)
+	merchant.Get("/request", controllers.MerchantRequestPayment)
 	merchant.Get("/theme", controllers.MerchantTheme)
 
 	admin := app.Group("/admin")

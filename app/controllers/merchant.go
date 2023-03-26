@@ -22,6 +22,13 @@ func MerchantPayments(c *fiber.Ctx) error {
 	}, "layouts/merchant-panel")
 }
 
+func MerchantRequestPayment(c *fiber.Ctx) error {
+	return c.Render("merchant-request-payment", fiber.Map{
+		"Username":  token.GetUsername(c),
+		"PageTitle": "Request Payment",
+	}, "layouts/merchant-panel")
+}
+
 func MerchantWithdrawals(c *fiber.Ctx) error {
 	return c.Render("merchant-withdrawals", fiber.Map{
 		"Username":  token.GetUsername(c),
