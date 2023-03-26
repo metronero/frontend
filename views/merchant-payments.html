@@ -1,7 +1,8 @@
 <section class="section">
-<p class="title">Payments</p>
-
-
+<p class="title is-spaced">Payments</p>
+{{ if not .Payments }}
+<p class="subtitle">Nothing yet.</p>
+{{ else }}
 <div class="table-container">
 <table class="table is-bordered is-striped is-hoverable is-fullwidth is-narrow">
   <thead>
@@ -23,24 +24,12 @@
       <td>{{ .Date }}</td>
     </tr>
   {{ end }}
-    <tr>
-      <td>Y4R44KL</td>
-      <td>0.23 XMR</td>
-      <td>0.1 XMR</td>
-      <td class="has-text-success">Finished</td>
-      <td>2023-02-12</td>
-    </tr>
-    <tr>
-      <td>HD2324</td>
-      <td>0.23 XMR</td>
-      <td>0.1 XMR</td>
-      <td class="has-text-success">Finished</td>
-      <td>2023-02-12</td>
-    </tr>
   </tbody>
 </table>
 </div>
+{{ end }}
 
+{{ if .Paging }}
 <div class="field is-grouped is-grouped-centered">
   <p class="control">
     <a class="button is-primary">
@@ -53,5 +42,5 @@
     </a>
   </p>
 </div>
-
+{{ end }}
 </section>

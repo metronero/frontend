@@ -7,14 +7,17 @@
       Total sales: {{ .TotalSales }} XMR
     </p>
     <div class="buttons">
-      <a class="button is-primary">Request payment</a>
+      <a class="button is-primary" href="/merchant/request">Request payment</a>
       <a class="button is-primary is-pulled-right" href="https://moneropay.eu">Docs</a>
     </div>
   </div>
 </section>
 
 <section class="section">
-<p class="title">Recent payments</p>
+<p class="title is-spaced">Recent payments</p>
+{{ if not .RecentPayments }}
+<p class="subtitle">Nothing yet.</p>
+{{ else }}
 <div class="table-container">
 <table class="table is-bordered is-striped is-hoverable is-fullwidth is-narrow">
   <thead>
@@ -34,52 +37,10 @@
       <td>{{ .Date }}</td>
     </tr>
   {{ end }}
-    <tr>
-      <td>Y4R44KL</td>
-      <td>0.23 XMR</td>
-      <td class="has-text-success">Finished</td>
-      <td>2023-02-12</td>
-    </tr>
-    <tr>
-      <td>T0PK3K</td>
-      <td>0.24 XMR</td>
-      <td class="has-text-danger">Cancelled</td>
-      <td>2023-02-10</td>
-    </tr>
-    <tr>
-      <td>45IUG4</td>
-      <td>0.34 XMR</td>
-      <td class="has-text-success">Finished</td>
-      <td>2023-02-05</td>
-    </tr>
-    <tr>
-      <td>32J4H2</td>
-      <td>0.12 XMR</td>
-      <td class="has-text-success">Finished</td>
-      <td>2023-01-30</td>
-    </tr>
-    <tr>
-      <td>832LK4</td>
-      <td>0.10 XMR</td>
-      <td class="has-text-success">Finished</td>
-      <td>2023-01-27</td>
-    </tr>
-    <tr>
-      <td>74JI99</td>
-      <td>0.10 XMR</td>
-      <td class="has-text-success">Finished</td>
-      <td>2023-01-27</td>
-    </tr>
-    <tr>
-      <td>32IURY</td>
-      <td>0.11 XMR</td>
-      <td class="has-text-success">Finished</td>
-      <td>2023-01-26</td>
-    </tr>
   </tbody>
 </table>
 </div>
 
 <button class="button is-primary is-pulled-right">Go to payment history</button>
-
+{{ end }}
 </section>

@@ -32,7 +32,7 @@ func main() {
 
 	merchant := app.Group("/merchant")
 	merchant.Use(server.MerchantJwtMiddleware)
-	merchant.Get("/auth", controllers.MerchantAuth)
+	merchant.Get("/account", controllers.MerchantAccount)
 	merchant.Get("/dashboard", controllers.MerchantDashboard)
 	merchant.Get("/payments", controllers.MerchantPayments)
 	merchant.Get("/withdrawals", controllers.MerchantWithdrawals)

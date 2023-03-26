@@ -43,9 +43,9 @@ func MerchantTheme(c *fiber.Ctx) error {
 	}, "layouts/merchant-panel")
 }
 
-func MerchantAuth(c *fiber.Ctx) error {
-	return c.Render("merchant-auth", fiber.Map{
+func MerchantAccount(c *fiber.Ctx) error {
+	return c.Render("merchant-account", fiber.Map{
 		"Username":  token.GetUsername(c),
-		"PageTitle": "Authentication",
+		"PageTitle": "Account",
 	}, "layouts/merchant-panel")
 }

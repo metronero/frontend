@@ -1,6 +1,8 @@
 <section class="section">
-<p class="title">Payments</p>
-
+<p class="title is-spaced">Payments</p>
+{{ if not .Payments }}
+<p class="subtitle">Nothing yet.</p>
+{{ else }}
 <div class="table-container">
 <table class="table is-bordered is-striped is-hoverable is-fullwidth is-narrow">
   <thead>
@@ -24,50 +26,12 @@
       <td>{{ .Date }}</td>
     </tr>
   {{ end }}
-    <tr>
-      <td>Siren</td>
-      <td>Y4R44KL</td>
-      <td>0.23 XMR</td>
-      <td>0.1 XMR</td>
-      <td class="has-text-success">Finished</td>
-      <td>2023-02-12</td>
-    </tr>
-    <tr>
-      <td>Siren</td>
-      <td>HD2324</td>
-      <td>0.23 XMR</td>
-      <td>0.1 XMR</td>
-      <td class="has-text-success">Finished</td>
-      <td>2023-02-12</td>
-    </tr>
-    <tr>
-      <td>Stnbee</td>
-      <td>T0PK3K</td>
-      <td>0.24 XMR</td>
-      <td>0.12 XMR</td>
-      <td class="has-text-danger">Cancelled</td>
-      <td>2023-02-10</td>
-    </tr>
-    <tr>
-      <td>Dong</td>
-      <td>45IUG4</td>
-      <td>0.34 XMR</td>
-      <td>0.15 XMR</td>
-      <td class="has-text-success">Finished</td>
-      <td>2023-02-05</td>
-    </tr>
-    <tr>
-      <td>Duxz</td>
-      <td>32J4H2</td>
-      <td>0.12 XMR</td>
-      <td>0.06 XMR</td>
-      <td class="has-text-success">Finished</td>
-      <td>2023-01-30</td>
-    </tr>
   </tbody>
 </table>
 </div>
+{{ end }}
 
+{{ if .Paging }}
 <div class="field is-grouped is-grouped-centered">
   <p class="control">
     <a class="button is-primary">
@@ -80,5 +44,5 @@
     </a>
   </p>
 </div>
-
+{{ end }}
 </section>

@@ -15,7 +15,10 @@
 
 
 <section class="section">
-<p class="title">Recent withdrawals</p>
+<p class="title is-spaced">Recent withdrawals</p>
+{{ if not .Withdrawals }}
+<p class="subtitle">Nothing yet.</p>
+{{ else }}
 <div class="table-container">
 <table class="table is-bordered is-striped is-hoverable is-fullwidth is-narrow">
   <thead>
@@ -38,4 +41,5 @@
 </div>
 
 <a class="button is-primary is-pulled-right" href="/admin/withdrawals">Go to withdrawal history</a>
+{{ end }}
 </section>

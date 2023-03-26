@@ -1,5 +1,8 @@
 <section class="section">
-<p class="title">Withdrawals</p>
+<p class="title is-spaced">Withdrawals</p>
+{{ if not .Withdrawals }}
+<p class="subtitle">Nothing yet.</p>
+{{ else }}
 <div class="table-container">
 <table class="table is-bordered is-striped is-hoverable is-fullwidth is-narrow">
   <thead>
@@ -10,20 +13,19 @@
     </tr>
   </thead>
   <tbody>
+  {{ range .Withdrawals}}
     <tr>
-      <td>Siren</td>
-      <td>1 XMR</td>
-      <td>2023-02-21</td>
+      <td>{{ .MerchantName }}</td>
+      <td>{{ .Amount }} XMR</td>
+      <td>{{ .Date }}</td>
     </tr>
-    <tr>
-      <td>Munstie</td>
-      <td>10 XMR</td>
-      <td>2023-02-12</td>
-    </tr>
+  {{ end }}
   </tbody>
 </table>
 </div>
+{{ end }}
 
+{{ if .Paging }}
 <div class="field is-grouped is-grouped-centered">
   <p class="control">
     <a class="button is-primary">
@@ -36,5 +38,5 @@
     </a>
   </p>
 </div>
-
+{{ end }}
 </section>
