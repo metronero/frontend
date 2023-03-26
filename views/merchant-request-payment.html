@@ -1,0 +1,56 @@
+<section class="section content">
+<h1 class="title is-spaced">Request Payment</h1>
+
+{{ if eq .Created "true" }}
+<div class="notification is-primary is-light">
+Successfully created payment request. You can now share this link or visit:<br>
+<a href="{{ .PaymentReqUrl }}"><code>{{ .PaymentReqUrl }}</code></a>
+</div>
+{{ end }}
+
+{{ if eq .Failed "true" }}
+<div class="notification is-danger is-light">
+Failed to create payment request. {{ .ErrorMessage }} (Code: {{ .ErrorCode }})
+</div>
+{{ end }}
+
+<form action="/request" method="POST">
+<div class="field is-horizontal">
+  <div class="field-label is-normal">
+    <label class="label">Amount</label>
+  </div>
+  <div class="field-body">
+    <div class="field">
+      <div class="control">
+        <input class="input" type="text" placeholder="0.1" name="amount">
+      </div>
+      <p class="help">
+        Amount in float XMR
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="field is-horizontal">
+  <div class="field-label is-normal">
+    <label class="label">Order ID</label>
+  </div>
+  <div class="field-body">
+    <div class="field">
+      <div class="control">
+        <input class="input" type="text" name="order_id">
+      </div>
+      <p class="help">
+        Optional
+      </p>
+    </div>
+  </div>
+</div>
+
+<button class="button is-primary is-pulled-right">Create</button>
+</form>
+</section>
+
+<div class="notification is-info is-light">
+If you would like to receive callbacks on updates, automate the payment process or write integrations for e-commerce, please refer to the <a href="https://moneropay.eu">documentation</a>.
+</div>
