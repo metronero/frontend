@@ -1,17 +1,17 @@
 <section class="section content">
 <h1 class="title is-spaced">Instance</h1>
 <div class="block">
-<p class="my-1"><b>Version:</b> {{ .Version }}</p>
-<p class="my-1"><b>Default commission:</b> {{ .DefaultCommission }}</p>
-<p class="my-1"><b>Custodial mode:</b> {{ .CustodialMode }}</p>
-<p class="my-1"><b>Registrations allowed:</b> {{ .RegistrationsAlowed }}</p>
-<p class="my-1"><b>Withdrawal period:</b> {{ .WithdrawalTimes }}</p>
+<p class="my-1"><b>Version:</b> {{ .InstanceInfo.Details.Version }}</p>
+<p class="my-1"><b>Default commission:</b> {{ .DefaultCommission }} XMR</p>
+<p class="my-1"><b>Custodial mode:</b> {{ .InstanceInfo.Details.CustodialMode }}</p>
+<p class="my-1"><b>Registrations allowed:</b> {{ .InstanceInfo.Details.RegistrationsAllowed }}</p>
+<p class="my-1"><b>Withdrawal period:</b> {{ .InstanceInfo.Details.WithdrawalTimes }}</p>
 </div>
 
 <div class="block">
-<p class="my-1"><b>Wallet balance:</b> {{ .WalletBalance }} XMR</p>
-<p class="my-1"><b>Total profits:</b> {{ .TotalProfits }}</p>
-<p class="my-1"><b>Total merchants:</b> {{ .TotalMerchants }}</p>
+<p class="my-1"><b>Wallet balance:</b> {{ .InstanceInfo.Stats.WalletBalance }} XMR</p>
+<p class="my-1"><b>Total profits:</b> {{ .InstanceInfo.Stats.TotalProfits }}</p>
+<p class="my-1"><b>Total merchants:</b> {{ .InstanceInfo.Stats.TotalMerchants }}</p>
 </div>
 
 <h2 class="title is-spaced">Settings</h2>

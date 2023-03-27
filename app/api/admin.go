@@ -12,13 +12,13 @@ import (
 	"gitlab.com/moneropay/metronero/metronero-frontend/utils/config"
 )
 
-func backendRequest(token, method string) ([]byte, error) {
-	endpoint, err := url.JoinPath(config.Backend, method)
+func backendRequest(token, method, endpoint string) ([]byte, error) {
+	endpoint, err := url.JoinPath(config.Backend, endpoint)
 	if err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("GET", endpoint, nil)
+	req, err := http.NewRequest(method, endpoint, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +33,7 @@ func backendRequest(token, method string) ([]byte, error) {
 }
 
 func GetAdminDashboard(token string) (*models.AdminDashboardInfo, error) {
-	resp, err := backendRequest(token, "/admin")
+	resp, err := backendRequest(token, "GET", "/admin")
 	if err != nil {
 		return nil, err
 	}

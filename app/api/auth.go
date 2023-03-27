@@ -17,7 +17,7 @@ var (
 	ErrRegisterFail = errors.New("Failed to register new user.")
 )
 
-func UserLogin(username, password string) (*models.TokenInfo, error) {
+func UserLogin(username, password string) (*models.ApiTokenInfo, error) {
 	endpoint, err := url.JoinPath(config.Backend, "/login")
 	if err != nil {
 		return nil, err
@@ -40,7 +40,7 @@ func UserLogin(username, password string) (*models.TokenInfo, error) {
 		return nil, err
 	}
 
-	var token models.TokenInfo
+	var token models.ApiTokenInfo
 	err = json.Unmarshal(b, &token)
 	return &token, err
 }

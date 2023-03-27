@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/gofiber/fiber/v2"
 
@@ -38,8 +37,7 @@ func PostLogin(c *fiber.Ctx) error {
 	cookie := new(fiber.Cookie)
 	cookie.Name = "token"
 	cookie.Value = token.Token
-	t, _ := time.Parse(time.RFC3339, token.ValidUntil)
-	cookie.Expires = t
+	cookie.Expires = token.ValidUntil
 	cookie.Secure = true
 	cookie.HTTPOnly = true
 	c.Cookie(cookie)

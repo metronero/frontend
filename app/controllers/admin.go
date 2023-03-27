@@ -19,13 +19,20 @@ func AdminDashboard(c *fiber.Ctx) error {
 		"PageTitle":   "Dashboard",
 		"Balance":     walletrpc.XMRToDecimal(resp.Stats.WalletBalance),
 		"Profits":     walletrpc.XMRToDecimal(resp.Stats.TotalProfits),
-		"Withdrawals": resp.Recent,
+		"Withdrawals": resp.RecentWithdrawals,
 	}, "layouts/admin-panel")
 }
 
 func AdminInstance(c *fiber.Ctx) error {
+	token := c.Cookies("token")
+	resp, err := api.GetInstanceInfo(token)
+	if err != nil {
+		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
+	}
 	return c.Render("admin-instance", fiber.Map{
-		"PageTitle": "Instance Settings",
+		"PageTitle": "Instance",
+		"InstanceInfo": resp,
+		"DefaultCommission": walletrpc.XMRToDecimal(resp.Details.DefaultCommission),
 	}, "layouts/admin-panel")
 }
 
