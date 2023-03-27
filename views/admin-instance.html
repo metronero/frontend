@@ -1,4 +1,30 @@
 <section class="section content">
+
+        {{ if eq .Success "true" }}
+        <article class="message is-primary">
+        <div class="message-body">
+          Saved successfully.
+        </div>
+        </article>
+        {{ end }}
+
+        {{ if eq .Missing "true" }}
+        <article class="message is-warning">
+        <div class="message-body">
+          Required fields can't be empty.
+        </div>
+        </article>
+        {{ end }}
+
+
+        {{ if eq .Failed "true" }}
+        <article class="message is-danger">
+        <div class="message-body">
+        Failed to save instance settings.
+	</div>
+        </article>
+        {{ end }}
+
 <h1 class="title is-spaced">Instance</h1>
 <div class="block">
 <p class="my-1"><b>Version:</b> {{ .InstanceInfo.Details.Version }}</p>
@@ -16,6 +42,7 @@
 
 <h2 class="title is-spaced">Settings</h2>
 
+<form action="/admin/instance" method="POST">
 <div class="field is-horizontal">
   <div class="field-label">
     <label class="label">Custodial mode</label>
@@ -24,11 +51,11 @@
     <div class="field is-narrow">
       <div class="control">
         <label class="radio">
-          <input type="radio" name="member">
+          <input type="radio" name="custodial_mode" value="true">
           On
         </label>
         <label class="radio">
-          <input type="radio" name="member">
+          <input type="radio" name="custodial_mode" value="false">
           Off
         </label>
       </div>
@@ -43,7 +70,7 @@
   <div class="field-body">
     <div class="field">
       <div class="control">
-        <input class="input" type="text" placeholder="0.1">
+        <input class="input" type="text" placeholder="0.005" name="default_commission">
       </div>
       <p class="help">
         Amount in float XMR
@@ -61,11 +88,11 @@
     <div class="field is-narrow">
       <div class="control">
         <label class="radio">
-          <input type="radio" name="member">
+          <input type="radio" name="registrations_allowed" value="true">
           Yes
         </label>
         <label class="radio">
-          <input type="radio" name="member">
+          <input type="radio" name="registrations_allowed" value="false">
           No
         </label>
       </div>
@@ -82,11 +109,11 @@
     <div class="field is-narrow">
       <div class="control">
 <div class="select">
-  <select>
-    <option>Instant</option>
-    <option>Daily</option>
-    <option>Weekly</option>
-    <option>Manual</option>
+  <select name="withdrawal_times">
+    <option value="instant">Instant</option>
+    <option value="daily">Daily</option>
+    <option value="weekly">Weekly</option>
+    <option value="manual">Manual</option>
   </select>
 </div>
     </div>
@@ -94,4 +121,5 @@
 </div>
 
 <button class="button is-primary is-pulled-right">Save</button>
+</form>
 </section>

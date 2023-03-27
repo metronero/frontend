@@ -43,6 +43,7 @@ func main() {
 	admin.Use(server.AdminJwtMiddleware)
 	admin.Get("/dashboard", controllers.AdminDashboard)
 	admin.Get("/instance", controllers.AdminInstance)
+	admin.Post("/instance", controllers.AdminEditInstance)
 	admin.Get("/withdrawals", controllers.AdminWithdrawals)
 	admin.Get("/payments", controllers.AdminPayments)
 	admin.Get("/merchants", controllers.AdminMerchants)
