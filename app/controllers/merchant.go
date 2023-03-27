@@ -1,24 +1,37 @@
 package controllers
 
 import (
+	"net/http"
+
 	"github.com/gofiber/fiber/v2"
 
+	"gitlab.com/moneropay/metronero/metronero-frontend/app/api"
 	"gitlab.com/moneropay/metronero/metronero-frontend/utils/token"
 )
 
 func MerchantDashboard(c *fiber.Ctx) error {
+	t := c.Cookies("token")
+	resp, err := api.GetMerchantInfo(t)
+	if err != nil {
+		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
+	}
 	return c.Render("merchant-dashboard", fiber.Map{
-		"Username":       token.GetUsername(c),
-		"PageTitle":      "Dashboard",
-		"CurrentBalance": "12",
-		"TotalSales":     "132",
+		"Username":  token.GetUsername(c),
+		"PageTitle": "Dashboard",
+		"Merchant":  resp,
 	}, "layouts/merchant-panel")
 }
 
 func MerchantPayments(c *fiber.Ctx) error {
+	t := c.Cookies("token")
+	resp, err := api.GetMerchantPayments(t)
+	if err != nil {
+		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
+	}
 	return c.Render("merchant-payments", fiber.Map{
 		"Username":  token.GetUsername(c),
 		"PageTitle": "Payments",
+		"Payments": resp,
 	}, "layouts/merchant-panel")
 }
 
@@ -30,9 +43,15 @@ func MerchantRequestPayment(c *fiber.Ctx) error {
 }
 
 func MerchantWithdrawals(c *fiber.Ctx) error {
+	t := c.Cookies("token")
+	resp, err := api.GetMerchantWithdrawals(t)
+	if err != nil {
+		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
+	}
 	return c.Render("merchant-withdrawals", fiber.Map{
 		"Username":  token.GetUsername(c),
 		"PageTitle": "Withdrawals",
+		"Withdrawals": resp,
 	}, "layouts/merchant-panel")
 }
 

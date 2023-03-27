@@ -1,10 +1,10 @@
 <section class="hero">
   <div class="hero-body">
     <p class="title">
-      Your balance: {{ .CurrentBalance }} XMR
+      Your balance: {{ .Merchant.Stats.Balance }} XMR
     </p>
     <p class="subtitle">
-      Total sales: {{ .TotalSales }} XMR
+      Total sales: {{ .Merchant.Stats.TotalSales }} XMR
     </p>
     <div class="buttons">
       <a class="button is-primary" href="/merchant/request">Request payment</a>
@@ -15,7 +15,7 @@
 
 <section class="section">
 <p class="title is-spaced">Recent payments</p>
-{{ if not .RecentPayments }}
+{{ if not .Merchant.RecentPayments }}
 <p class="subtitle">Nothing yet.</p>
 {{ else }}
 <div class="table-container">
@@ -29,12 +29,12 @@
     </tr>
   </thead>
   <tbody>
-  {{ range .RecentPayments }}
+  {{ range .Merchant.RecentPayments }}
     <tr>
-      <td>{{ .InvoiceID }}</td>
-      <td>{{ .AmountFloat }} XMR</td>
+      <td>{{ .InvoiceId }}</td>
+      <td>{{ .Amount }} XMR</td>
       <td>{{ .Status }}</td>
-      <td>{{ .Date }}</td>
+      <td>{{ .LastUpdate }}</td>
     </tr>
   {{ end }}
   </tbody>

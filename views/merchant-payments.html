@@ -17,11 +17,11 @@
   <tbody>
   {{ range .Payments }}
     <tr>
-      <td>{{ .InvoiceID }}</td>
-      <td>{{ .AmountFloat }} XMR</td>
+      <td>{{ .InvoiceId }}</td>
+      <td>{{ .Amount }} XMR</td>
       <td>{{ .Fee }} XMR</td>
       <td>{{ .Status }}</td>
-      <td>{{ .Date }}</td>
+      <td>{{ .LastUpdate }}</td>
     </tr>
   {{ end }}
   </tbody>

@@ -25,3 +25,33 @@ func GetMerchantById(token, merchantId string) (models.Merchant, error) {
 	err = json.Unmarshal(resp, &m)
 	return m, err
 }
+
+func GetMerchantInfo(token string) (models.MerchantDashboardInfo, error) {
+	var m models.MerchantDashboardInfo
+	resp, err := backendRequest(token, "GET", "/merchant", nil)
+	if err != nil {
+		return m, err
+	}
+	err = json.Unmarshal(resp, &m)
+	return m, err
+}
+
+func GetMerchantPayments(token string) ([]models.Payment, error) {
+	var p []models.Payment
+	resp, err := backendRequest(token, "GET", "/merchant/payment", nil)
+	if err != nil {
+		return p, err
+	}
+	err = json.Unmarshal(resp, &p)
+	return p, err
+}
+
+func GetMerchantWithdrawals(token string) ([]models.Withdrawal, error) {
+	var p []models.Withdrawal
+	resp, err := backendRequest(token, "GET", "/merchant/withdrawal", nil)
+	if err != nil {
+		return p, err
+	}
+	err = json.Unmarshal(resp, &p)
+	return p, err
+}
