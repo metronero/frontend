@@ -15,3 +15,23 @@ func GetAdminDashboard(token string) (*models.AdminDashboardInfo, error) {
 	err = json.Unmarshal(resp, &a)
 	return &a, err
 }
+
+func AdminGetWithdrawals(token string) ([]models.Withdrawal, error) {
+	var w []models.Withdrawal
+	resp, err := backendRequest(token, "GET", "/admin/withdrawal", nil)
+	if err != nil {
+		return w, err
+	}
+	err = json.Unmarshal(resp, &w)
+	return w, err
+}
+
+func AdminGetPayments(token string) ([]models.Payment, error) {
+	var w []models.Payment
+	resp, err := backendRequest(token, "GET", "/admin/payment", nil)
+	if err != nil {
+		return w, err
+	}
+	err = json.Unmarshal(resp, &w)
+	return w, err
+}

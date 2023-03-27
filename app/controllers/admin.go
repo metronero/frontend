@@ -89,14 +89,26 @@ func AdminEditInstance(c *fiber.Ctx) error {
 }
 
 func AdminWithdrawals(c *fiber.Ctx) error {
+	token := c.Cookies("token")
+	resp, err := api.AdminGetWithdrawals(token)
+	if err != nil {
+		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
+	}
 	return c.Render("admin-withdrawals", fiber.Map{
 		"PageTitle": "Withdrawals",
+		"Withdrawals": resp,
 	}, "layouts/admin-panel")
 }
 
 func AdminPayments(c *fiber.Ctx) error {
+	token := c.Cookies("token")
+	resp, err := api.AdminGetPayments(token)
+	if err != nil {
+		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
+	}
 	return c.Render("admin-payments", fiber.Map{
 		"PageTitle": "Payments",
+		"Payments": resp,
 	}, "layouts/admin-panel")
 }
 
