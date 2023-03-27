@@ -15,3 +15,13 @@ func GetMerchantList(token string) ([]models.Merchant, error) {
 	err = json.Unmarshal(resp, &m)
 	return m, err
 }
+
+func GetMerchantById(token, merchantId string) (models.Merchant, error) {
+	var m models.Merchant
+	resp, err := backendRequest(token, "GET", "/admin/merchant/" + merchantId, nil)
+	if err != nil {
+		return m, err
+	}
+	err = json.Unmarshal(resp, &m)
+	return m, err
+}

@@ -1,5 +1,12 @@
 <section class="section">
-<p class="title">{{ .Username }} Settings</p>
+<h1 class="title is-spaced">{{ .Merchant.Name }}</h1>
+
+<div class="block">
+<p class="my-1"><b>Commission:</b> {{ .CommissionRate }} XMR</p>
+<p class="my-1"><b>Disabled:</b> {{ .Merchant.Disabled }}</p>
+</div>
+
+<h2 class="title is-spaced">Settings</h2>
 
 <div class="field has-addons">
   <p class="control">
@@ -12,11 +19,19 @@
   </p>
 </div>
 
-
   <p class="control">
-    <a class="button is-danger">
+    <a class="button is-warning">
       Disable account
      </a>
     </p>
+</form>
 
+<form>
+  <p class="control mt-3">
+    <a class="button is-danger">
+      Delete account
+     </a>
+    </p>
+<form>
+</div>
 </section>

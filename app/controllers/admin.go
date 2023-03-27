@@ -112,6 +112,20 @@ func AdminMerchants(c *fiber.Ctx) error {
 	}, "layouts/admin-panel")
 }
 
+
+func AdminGetMerchant(c *fiber.Ctx) error {
+	token := c.Cookies("token")
+	merchant, err := api.GetMerchantById(token, c.Params("id"))
+	if err != nil {
+		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
+	}
+	return c.Render("admin-merchant-edit", fiber.Map{
+		"PageTitle": "Merchant Edit",
+		"Merchant": merchant,
+		"CommissionRate": walletrpc.XMRToDecimal(merchant.CommissionRate),
+	}, "layouts/admin-panel")
+}
+
 func AdminMerchantEdit(c *fiber.Ctx) error {
 	params := c.AllParams()
 	return c.Render("admin-merchant-edit", fiber.Map{
