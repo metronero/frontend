@@ -101,8 +101,14 @@ func AdminPayments(c *fiber.Ctx) error {
 }
 
 func AdminMerchants(c *fiber.Ctx) error {
+	token := c.Cookies("token")
+	resp, err := api.GetMerchantList(token)
+	if err != nil {
+		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
+	}
 	return c.Render("admin-merchants", fiber.Map{
 		"PageTitle": "Merchants",
+		"Merchants": resp,
 	}, "layouts/admin-panel")
 }
 

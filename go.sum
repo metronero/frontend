@@ -1219,6 +1219,8 @@ gitlab.com/moneropay/metronero/metronero-backend v0.0.0-20230312143011-a3d67f482
 gitlab.com/moneropay/metronero/metronero-backend v0.0.0-20230312143011-a3d67f4825b2/go.mod h1:lmfryZVQn0vKF0j3ZKKEG6xquohnlRzOQ+rM32OrP7U=
 gitlab.com/moneropay/metronero/metronero-backend v0.0.0-20230326235400-ddb2224fae74 h1:d0PXmnIIH4pDXqAs/I+yAfHDniBNzfmZ4KP2GHYR2vE=
 gitlab.com/moneropay/metronero/metronero-backend v0.0.0-20230326235400-ddb2224fae74/go.mod h1:rpr7XAaG2WNTgHNsvdwMQhBoM75aoZ8A/PhlA1y12v0=
+gitlab.com/moneropay/metronero/metronero-backend v0.0.0-20230327190409-b324bc8587cc h1:YnTvHqrmJzyUnI+0aj5PptTqsWDwyj/ABKiE8FLOot4=
+gitlab.com/moneropay/metronero/metronero-backend v0.0.0-20230327190409-b324bc8587cc/go.mod h1:rpr7XAaG2WNTgHNsvdwMQhBoM75aoZ8A/PhlA1y12v0=
 gitlab.com/nyarla/go-crypt v0.0.0-20160106005555-d9a5dc2b789b/go.mod h1:T3BPAOm2cqquPa0MKWeNkmOM5RQsRhkrwMWonFMN7fE=
 go.etcd.io/bbolt v1.3.2/go.mod h1:IbVyRI1SCnLcuJnV2u8VeU0CEYM7e686BmAb1XKL+uU=
 go.etcd.io/bbolt v1.3.3/go.mod h1:IbVyRI1SCnLcuJnV2u8VeU0CEYM7e686BmAb1XKL+uU=

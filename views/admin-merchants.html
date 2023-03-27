@@ -4,39 +4,16 @@
 <p class="subtitle">Select a merchant to configure.<p>
 
 <div class="columns is-multiline is-mobile">
+{{ range .Merchants }}
   <div class="column is-narrow">
-    <a class="button is-info" href="/admin/merchants/edit/uuid?uname=siren">
-    Siren
+    <a class="button is-info" href="/admin/merchants/{{ .AccountId }}">
+    {{ .Name }}
     </a>
   </div>
-  <div class="column is-narrow">
-    <a class="button is-info">
-    Munstie
-    </a>
-  </div>
-  <div class="column is-narrow">
-    <a class="button is-info">
-    Duxz
-    </a>
-  </div>
-  <div class="column is-narrow">
-    <a class="button is-info">
-    Stnby
-    </a>
-  </div>
-  <div class="column is-narrow">
-    <a class="button is-info">
-    Koutsie
-    </a>
-  </div>
-  <div class="column is-narrow">
-    <a class="button is-info">
-    Dong
-    </a>
-  </div>
+{{ end }}
 </div>
 
-
+{{ if .Paging }}
 <div class="field is-grouped is-grouped-centered">
   <p class="control">
     <a class="button is-primary">
@@ -49,5 +26,6 @@
     </a>
   </p>
 </div>
+{{ end }}
 
 </section>
