@@ -48,6 +48,7 @@ func main() {
 	admin.Get("/payments", controllers.AdminPayments)
 	admin.Get("/merchants", controllers.AdminMerchants)
 	admin.Get("/merchants/:id", controllers.AdminGetMerchant)
+	admin.Post("/merchants/delete/:id", controllers.AdminDeleteMerchant)
 	//admin.Post("/merchants/:id", controllers.AdminMerchantEdit)
 
 	app.StartServerWithGracefulShutdown()

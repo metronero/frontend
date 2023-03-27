@@ -102,6 +102,7 @@ func AdminPayments(c *fiber.Ctx) error {
 
 func AdminMerchants(c *fiber.Ctx) error {
 	token := c.Cookies("token")
+	deleted := c.Query("deleted", "false")
 	resp, err := api.GetMerchantList(token)
 	if err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
@@ -109,6 +110,7 @@ func AdminMerchants(c *fiber.Ctx) error {
 	return c.Render("admin-merchants", fiber.Map{
 		"PageTitle": "Merchants",
 		"Merchants": resp,
+		"Deleted": deleted,
 	}, "layouts/admin-panel")
 }
 
@@ -132,4 +134,12 @@ func AdminMerchantEdit(c *fiber.Ctx) error {
 		"Username":  params["uname"],
 		"PageTitle": "Merchant Edit",
 	}, "layouts/admin-panel")
+}
+
+func AdminDeleteMerchant(c *fiber.Ctx) error {
+	token := c.Cookies("token")
+	if err := api.DeleteMerchantById(token, c.Params("id")); err != nil {
+		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
+	}
+	return c.Redirect("/admin/merchants?deleted=true")
 }

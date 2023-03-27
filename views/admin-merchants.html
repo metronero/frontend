@@ -1,4 +1,13 @@
 <section class="section">
+
+        {{ if eq .Deleted "true" }}
+        <article class="message is-primary">
+        <div class="message-body">
+          Merchant deleted successfully.
+        </div>
+        </article>
+        {{ end }}
+
 <p class="title is-spaced">Merchants</p>
 
 <p class="subtitle">Select a merchant to configure.<p>

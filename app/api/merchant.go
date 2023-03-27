@@ -55,3 +55,8 @@ func GetMerchantWithdrawals(token string) ([]models.Withdrawal, error) {
 	err = json.Unmarshal(resp, &p)
 	return p, err
 }
+
+func DeleteMerchantById(token, id string) error {
+	_, err := backendRequest(token, "DELETE", "/admin/merchant/" + id, nil)
+	return err
+}
