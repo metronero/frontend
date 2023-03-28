@@ -9,7 +9,7 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/namsral/flag v1.7.4-pre
 	gitlab.com/moneropay/go-monero v1.1.0
-	gitlab.com/moneropay/metronero/metronero-backend v0.0.0-20230327190409-b324bc8587cc
+	gitlab.com/moneropay/metronero/metronero-backend v0.0.0-20230328052356-0b4d3065042d
 )
 
 require (

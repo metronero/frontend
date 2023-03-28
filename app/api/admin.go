@@ -35,3 +35,8 @@ func AdminGetPayments(token string) ([]models.Payment, error) {
 	err = json.Unmarshal(resp, &w)
 	return w, err
 }
+
+func AdminEditMerchant(token, id string, conf interface{}) error {
+	_, err := backendRequest(token, "POST", "/admin/merchant/" + id, conf)
+	return err
+}

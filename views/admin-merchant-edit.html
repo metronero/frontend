@@ -1,4 +1,13 @@
 <section class="section">
+
+        {{ if eq .Success "true" }}
+        <article class="message is-primary">
+        <div class="message-body">
+          Saved successfully.
+        </div>
+        </article>
+        {{ end }}
+
 <h1 class="title is-spaced">{{ .Merchant.Name }}</h1>
 
 <div class="block">
@@ -8,21 +17,24 @@
 
 <h2 class="title is-spaced">Settings</h2>
 
-<div class="field has-addons">
+<form action="/admin/merchants/{{ .Merchant.AccountId }}" method="POST">
+<div class="mb-3 field has-addons">
   <p class="control">
-    <input class="input" type="text" placeholder="Amount of money">
+    <input class="input" type="text" placeholder="Amount of money" name="commission">
   </p>
   <p class="control">
-    <a class="button is-primary">
+    <button class="button is-primary">
       Set commission
-    </a>
+    </button>
   </p>
 </div>
+</form>
 
+<form action="/admin/merchants/{{ .Merchant.AccountId }}" method="POST">
   <p class="control">
-    <a class="button is-warning">
+    <button class="button is-warning" name="disable" value="true">
       Disable account
-     </a>
+     </button>
     </p>
 </form>
 

@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 	"log"
+	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 	"gitlab.com/moneropay/go-monero/walletrpc"
@@ -128,6 +129,7 @@ func AdminMerchants(c *fiber.Ctx) error {
 
 
 func AdminGetMerchant(c *fiber.Ctx) error {
+	success := c.Query("success", "false")
 	token := c.Cookies("token")
 	merchant, err := api.GetMerchantById(token, c.Params("id"))
 	if err != nil {
@@ -137,15 +139,50 @@ func AdminGetMerchant(c *fiber.Ctx) error {
 		"PageTitle": "Merchant Edit",
 		"Merchant": merchant,
 		"CommissionRate": walletrpc.XMRToDecimal(merchant.CommissionRate),
+		"Success": success,
 	}, "layouts/admin-panel")
 }
 
-func AdminMerchantEdit(c *fiber.Ctx) error {
-	params := c.AllParams()
-	return c.Render("admin-merchant-edit", fiber.Map{
-		"Username":  params["uname"],
-		"PageTitle": "Merchant Edit",
-	}, "layouts/admin-panel")
+func AdminEditMerchant(c *fiber.Ctx) error {
+	commission := c.FormValue("commission")
+	disable := c.FormValue("disable")
+
+	if commission == "" && disable == "" {
+		c.Redirect("/admin/merchants/" + c.Params("id"))
+	}
+
+	type merchantConf struct {
+	        AccountId      string  `json:"account_id,omitempty"`
+      		CommissionRate uint64 `json:"commission_rate,omitempty"`
+        	Disabled       bool   `json:"disabled,omitempty"`
+	}
+
+	var conf merchantConf
+
+	if commission != "" {
+		floatCommission, err := strconv.ParseFloat(commission, 64)
+		if err != nil {
+			return serveErrorPage(c, http.StatusInternalServerError, err.Error())
+		}
+		comRate := uint64(floatCommission * 1000000000000)
+		conf.CommissionRate = comRate
+	}
+
+	if disable != "" {
+		disabledBool, err := strconv.ParseBool(disable)
+		if err != nil {
+			return serveErrorPage(c, http.StatusInternalServerError, err.Error())
+		}
+		conf.Disabled = disabledBool
+	}
+
+	id := c.Params("id")
+	conf.AccountId = id
+	token := c.Cookies("token")
+	if err := api.AdminEditMerchant(token, id, conf); err != nil {
+		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
+	}
+	return c.Redirect(fmt.Sprintf("/admin/merchants/%s?success=true", id))
 }
 
 func AdminDeleteMerchant(c *fiber.Ctx) error {
