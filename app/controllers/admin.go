@@ -151,13 +151,7 @@ func AdminEditMerchant(c *fiber.Ctx) error {
 		c.Redirect("/admin/merchants/" + c.Params("id"))
 	}
 
-	type merchantConf struct {
-	        AccountId      string  `json:"account_id,omitempty"`
-      		CommissionRate uint64 `json:"commission_rate,omitempty"`
-        	Disabled       bool   `json:"disabled,omitempty"`
-	}
-
-	var conf merchantConf
+	var conf models.MerchantSettings
 
 	if commission != "" {
 		floatCommission, err := strconv.ParseFloat(commission, 64)
@@ -165,7 +159,7 @@ func AdminEditMerchant(c *fiber.Ctx) error {
 			return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 		}
 		comRate := uint64(floatCommission * 1000000000000)
-		conf.CommissionRate = comRate
+		conf.CommissionRate = &comRate
 	}
 
 	if disable != "" {
@@ -173,7 +167,7 @@ func AdminEditMerchant(c *fiber.Ctx) error {
 		if err != nil {
 			return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 		}
-		conf.Disabled = disabledBool
+		conf.Disabled = &disabledBool
 	}
 
 	id := c.Params("id")

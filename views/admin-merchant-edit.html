@@ -36,6 +36,14 @@
       Disable account
      </button>
     </p>
+ </form>
+
+<form action="/admin/merchants/{{ .Merchant.AccountId }}" method="POST">
+<p class="control">
+    <button class="mt-3 button is-primary" name="disable" value="false">
+      Enable account
+     </button>
+    </p>
 </form>
 
 <form action="/admin/merchants/delete/{{ .Merchant.AccountId }}" method="POST">
