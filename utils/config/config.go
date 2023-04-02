@@ -1,6 +1,11 @@
 package config
 
-import "github.com/namsral/flag"
+import (
+	"net/http"
+
+	"github.com/namsral/flag"
+	"gitlab.com/metronero/backend/pkg/api"
+)
 
 var (
 	Bind      string
@@ -8,6 +13,7 @@ var (
 	Backend   string
 	Uname     string
 	JwtSecret string
+	Api *api.ApiClient
 )
 
 func Load() {
@@ -15,6 +21,9 @@ func Load() {
 	flag.BoolVar(&Debug, "debug", false, "Debug mode")
 	flag.StringVar(&Backend, "backend", "http://localhost:5001", "Metronero backend host:port")
 	flag.StringVar(&JwtSecret, "token-secret", "", "Secret for authentication tokens, same as backend")
+	Api = &api.ApiClient{
+		Client: http.DefaultClient,
+		BaseUrl: Backend,
+	}
 	flag.Parse()
-	Uname = "Siren"
 }

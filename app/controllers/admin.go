@@ -8,14 +8,14 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"gitlab.com/moneropay/go-monero/walletrpc"
-	"gitlab.com/moneropay/metronero/metronero-backend/app/models"
+	"gitlab.com/metronero/backend/app/models"
 
-	"gitlab.com/moneropay/metronero/metronero-frontend/app/api"
+	"gitlab.com/metronero/frontend/utils/config"
 )
 
 func AdminDashboard(c *fiber.Ctx) error {
 	token := c.Cookies("token")
-	resp, err := api.GetAdminDashboard(token)
+	resp, err := config.Api.GetAdminDashboard(token)
 	if err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 	}
@@ -33,7 +33,7 @@ func AdminInstance(c *fiber.Ctx) error {
 	missing := c.Query("required", "false")
 
 	token := c.Cookies("token")
-	resp, err := api.GetInstanceInfo(token)
+	resp, err := config.Api.GetInstanceInfo(token)
 	if err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 	}
@@ -82,7 +82,7 @@ func AdminEditInstance(c *fiber.Ctx) error {
 
 	log.Printf("%v", conf)
 	token := c.Cookies("token")
-	if err := api.UpdateInstance(token, &conf); err != nil {
+	if err := config.Api.UpdateInstance(token, &conf); err != nil {
 		return c.Redirect("/admin/instance?failed=true")
 	}
 
@@ -91,7 +91,7 @@ func AdminEditInstance(c *fiber.Ctx) error {
 
 func AdminWithdrawals(c *fiber.Ctx) error {
 	token := c.Cookies("token")
-	resp, err := api.AdminGetWithdrawals(token)
+	resp, err := config.Api.AdminGetWithdrawals(token)
 	if err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 	}
@@ -103,7 +103,7 @@ func AdminWithdrawals(c *fiber.Ctx) error {
 
 func AdminPayments(c *fiber.Ctx) error {
 	token := c.Cookies("token")
-	resp, err := api.AdminGetPayments(token)
+	resp, err := config.Api.AdminGetPayments(token)
 	if err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 	}
@@ -116,7 +116,7 @@ func AdminPayments(c *fiber.Ctx) error {
 func AdminMerchants(c *fiber.Ctx) error {
 	token := c.Cookies("token")
 	deleted := c.Query("deleted", "false")
-	resp, err := api.GetMerchantList(token)
+	resp, err := config.Api.GetMerchantList(token)
 	if err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 	}
@@ -131,7 +131,7 @@ func AdminMerchants(c *fiber.Ctx) error {
 func AdminGetMerchant(c *fiber.Ctx) error {
 	success := c.Query("success", "false")
 	token := c.Cookies("token")
-	merchant, err := api.GetMerchantById(token, c.Params("id"))
+	merchant, err := config.Api.GetMerchantById(token, c.Params("id"))
 	if err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 	}
@@ -173,7 +173,7 @@ func AdminEditMerchant(c *fiber.Ctx) error {
 	id := c.Params("id")
 	conf.AccountId = id
 	token := c.Cookies("token")
-	if err := api.AdminEditMerchant(token, id, conf); err != nil {
+	if err := config.Api.AdminEditMerchant(token, id, conf); err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 	}
 	return c.Redirect(fmt.Sprintf("/admin/merchants/%s?success=true", id))
@@ -181,7 +181,7 @@ func AdminEditMerchant(c *fiber.Ctx) error {
 
 func AdminDeleteMerchant(c *fiber.Ctx) error {
 	token := c.Cookies("token")
-	if err := api.DeleteMerchantById(token, c.Params("id")); err != nil {
+	if err := config.Api.DeleteMerchantById(token, c.Params("id")); err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 	}
 	return c.Redirect("/admin/merchants?deleted=true")

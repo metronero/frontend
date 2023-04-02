@@ -4,9 +4,9 @@ import (
 	"github.com/gofiber/fiber/v2"
 	jwtware "github.com/gofiber/jwt/v3"
 
-	"gitlab.com/moneropay/metronero/metronero-frontend/app/controllers"
-	"gitlab.com/moneropay/metronero/metronero-frontend/utils/config"
-	"gitlab.com/moneropay/metronero/metronero-frontend/utils/server"
+	"gitlab.com/metronero/frontend/app/controllers"
+	"gitlab.com/metronero/frontend/utils/config"
+	"gitlab.com/metronero/frontend/utils/server"
 )
 
 func main() {

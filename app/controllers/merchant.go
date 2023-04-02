@@ -5,13 +5,13 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 
-	"gitlab.com/moneropay/metronero/metronero-frontend/app/api"
-	"gitlab.com/moneropay/metronero/metronero-frontend/utils/token"
+	"gitlab.com/metronero/frontend/utils/config"
+	"gitlab.com/metronero/frontend/utils/token"
 )
 
 func MerchantDashboard(c *fiber.Ctx) error {
 	t := c.Cookies("token")
-	resp, err := api.GetMerchantInfo(t)
+	resp, err := config.Api.GetMerchantInfo(t)
 	if err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 	}
@@ -24,7 +24,7 @@ func MerchantDashboard(c *fiber.Ctx) error {
 
 func MerchantPayments(c *fiber.Ctx) error {
 	t := c.Cookies("token")
-	resp, err := api.GetMerchantPayments(t)
+	resp, err := config.Api.GetMerchantPayments(t)
 	if err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 	}
@@ -44,7 +44,7 @@ func MerchantRequestPayment(c *fiber.Ctx) error {
 
 func MerchantWithdrawals(c *fiber.Ctx) error {
 	t := c.Cookies("token")
-	resp, err := api.GetMerchantWithdrawals(t)
+	resp, err := config.Api.GetMerchantWithdrawals(t)
 	if err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 	}

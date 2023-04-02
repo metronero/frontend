@@ -5,7 +5,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 
-	"gitlab.com/moneropay/metronero/metronero-frontend/app/api"
+	"gitlab.com/metronero/frontend/utils/config"
 )
 
 func GetLogin(c *fiber.Ctx) error {
@@ -29,7 +29,7 @@ func PostLogin(c *fiber.Ctx) error {
 		return serveErrorPage(c, http.StatusBadRequest,
 		    "Required form fields must not be empty")
 	}
-	token, err := api.UserLogin(username, password)
+	token, err := config.Api.UserLogin(username, password)
 	if err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 	}
@@ -59,7 +59,7 @@ func PostRegister(c *fiber.Ctx) error {
 		return serveErrorPage(c, http.StatusBadRequest,
 		    "Required form fields must not be empty")
 	}
-	if err := api.UserRegister(username, password); err != nil {
+	if err := config.Api.UserRegister(username, password); err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 	}
 	return c.Redirect("/login?success=true")
