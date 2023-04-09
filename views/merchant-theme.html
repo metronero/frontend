@@ -1,4 +1,22 @@
 <section class="section content">
+
+        {{ if eq .Saved "true" }}
+        <article class="message is-primary">
+        <div class="message-body">
+          Uploaded theme successfully.
+        </div>
+        </article>
+        {{ end }}
+
+
+        {{ if eq .Reset "true" }}
+        <article class="message is-primary">
+        <div class="message-body">
+          Switched to default theme.
+        </div>
+        </article>
+        {{ end }}
+
 <h1 class="title is-spaced">Template</h1>
 <form method="POST" enctype="multipart/form-data" action="/merchant/template">
 <div class="field is-grouped mb-5">
@@ -30,11 +48,13 @@
       Preview current template
     </a>
   </p>
+  <form method="POST" action="/merchant/template/reset">
   <p class="control">
-    <a class="button is-primary" href="/merchant/theme?set=default">
+    <button class="button is-primary">
       Set default template
-    </a>
+    </button>
   </p>
+  </form>
 </div>
 
 </section>

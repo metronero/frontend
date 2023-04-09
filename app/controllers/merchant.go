@@ -67,9 +67,14 @@ func MerchantWithdrawals(c *fiber.Ctx) error {
 }
 
 func MerchantTemplate(c *fiber.Ctx) error {
+	saved := c.Query("saved", "false")
+	reset := c.Query("reset", "false")
+
 	return c.Render("merchant-theme", fiber.Map{
 		"Username":  token.GetUsername(c),
 		"PageTitle": "Theme",
+		"Saved": saved,
+		"Reset": reset,
 	}, "layouts/merchant-panel")
 }
 
@@ -97,8 +102,15 @@ func MerchantTemplateUpload(c *fiber.Ctx) error {
 	if err := config.Api.MerchantTemplateUpload(t, f); err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 	}
-	// TODO: saved=true
-	return c.Redirect("/merchant/template")
+	return c.Redirect("/merchant/template?saved=true")
+}
+
+func MerchantTemplateReset(c *fiber.Ctx) error {
+	t := c.Cookies("token")
+	if err := config.Api.MerchantTemplateReset(t); err != nil {
+		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
+	}
+	return c.Redirect("/merchant/template?reset=true")
 }
 
 func MerchantAccount(c *fiber.Ctx) error {

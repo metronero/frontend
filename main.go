@@ -40,6 +40,7 @@ func main() {
 	merchant.Get("/template", controllers.MerchantTemplate)
 	merchant.Get("/template/preview", controllers.MerchantTemplatePreview)
 	merchant.Post("/template", controllers.MerchantTemplateUpload)
+	merchant.Post("/template/reset", controllers.MerchantTemplateReset)
 
 	admin := app.Group("/admin")
 	admin.Use(server.AdminJwtMiddleware)
