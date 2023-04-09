@@ -255,6 +255,8 @@ github.com/kisielk/errcheck v1.5.0/go.mod h1:pFxgyoBC7bSaBwPgfKdkLd5X25qrDl4LWUI
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/klauspost/compress v1.16.3 h1:XuJt9zzcnaz6a16/OU53ZjWp/v7/42WcR5t2a0PcNQY=
 github.com/klauspost/compress v1.16.3/go.mod h1:ntbaceVETuRiXiv4DpjP66DpAtAGkEQskQzEyD//IeE=
+github.com/klauspost/compress v1.16.4 h1:91KN02FnsOYhuunwU4ssRe8lc2JosWmizWa91B5v1PU=
+github.com/klauspost/compress v1.16.4/go.mod h1:ntbaceVETuRiXiv4DpjP66DpAtAGkEQskQzEyD//IeE=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/kr/fs v0.1.0/go.mod h1:FFnZGqtBN9Gxj7eW1uZ42v5BccTP0vu6NEaFoC2HwRg=
 github.com/kr/logfmt v0.0.0-20140226030751-b84e30acd515/go.mod h1:+0opPa2QZZtGFBFZlji/RkVcI2GknAs/DXo4wKdlNEc=
@@ -385,6 +387,8 @@ gitlab.com/metronero/backend v0.0.0-20230329223742-6c92b53210d4 h1:6ZO9BBT2Rn2sD
 gitlab.com/metronero/backend v0.0.0-20230329223742-6c92b53210d4/go.mod h1:i4gPI3+1uJi2xtRUIqAv5zeg+fsIoKtFTZeHd7zzHKo=
 gitlab.com/metronero/backend v0.0.0-20230402203849-878642bdb657 h1:Khyom8ejUBT1SWB5nnZQrEafpRxkhCRY9ZcxVJHUJiU=
 gitlab.com/metronero/backend v0.0.0-20230402203849-878642bdb657/go.mod h1:i4gPI3+1uJi2xtRUIqAv5zeg+fsIoKtFTZeHd7zzHKo=
+gitlab.com/metronero/backend v0.0.0-20230409200421-4bfc90f6f2a4 h1:YrQybHILonumSY5+T9Ydn7w7lgFuLLkGEnHrBwiZYnM=
+gitlab.com/metronero/backend v0.0.0-20230409200421-4bfc90f6f2a4/go.mod h1:RJgPeIYL+Knc9+2PPXclLTA2dVEAbGXMWYazILesMu4=
 gitlab.com/moneropay/go-monero v1.1.0 h1:30pfEUORwjEyRR20jEQ2zZguud08vvxBijlaHJwUNc0=
 gitlab.com/moneropay/go-monero v1.1.0/go.mod h1:k7fElrhjex1ktCy45ebcgz66oGBeOtciBZA405s3Oz0=
 go.etcd.io/etcd/api/v3 v3.5.1/go.mod h1:cbVKeC6lCfl7j/8jBhAK6aIYO9XOjdptoxU/nLQcPvs=
@@ -603,6 +607,8 @@ golang.org/x/sys v0.3.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.5.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.6.0 h1:MVltZSvRTcU2ljQOhs94SXPftV6DCNnZViHeQps87pQ=
 golang.org/x/sys v0.6.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+golang.org/x/sys v0.7.0 h1:3jlCCIQZPdOYu1h8BkNvLz8Kgwtae2cagcG/VamtZRU=
+golang.org/x/sys v0.7.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1/go.mod h1:bj7SfCRtBDWHUb9snDiAeCFNEtKQo2Wmx5Cou7ajbmo=
 golang.org/x/term v0.0.0-20210927222741-03fcf44c2211/go.mod h1:jbD1KX2456YbFQfuXm/mYQcufACuNUgVhRMnK/tPxf8=
 golang.org/x/term v0.3.0/go.mod h1:q750SLmJuPmVoN1blW3UFBPREJfb1KmY3vwxfr+nFDA=

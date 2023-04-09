@@ -37,7 +37,9 @@ func main() {
 	merchant.Get("/payments", controllers.MerchantPayments)
 	merchant.Get("/withdrawals", controllers.MerchantWithdrawals)
 	merchant.Get("/request", controllers.MerchantRequestPayment)
-	merchant.Get("/theme", controllers.MerchantTheme)
+	merchant.Get("/template", controllers.MerchantTemplate)
+	merchant.Get("/template/preview", controllers.MerchantTemplatePreview)
+	merchant.Post("/template", controllers.MerchantTemplateUpload)
 
 	admin := app.Group("/admin")
 	admin.Use(server.AdminJwtMiddleware)

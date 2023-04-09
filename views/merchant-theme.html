@@ -1,30 +1,38 @@
 <section class="section content">
-<h1 class="title is-spaced">Theme</h1>
-<p>Active theme: default</p>
+<h1 class="title is-spaced">Template</h1>
+<form method="POST" enctype="multipart/form-data" action="/merchant/template">
+<div class="field is-grouped mb-5">
 
-<div class="file is-medium is-boxed mb-5">
+<div class="file mr-3">
   <label class="file-label">
-    <input class="file-input" type="file" name="resume">
+    <input class="file-input" type="file" name="file">
     <span class="file-cta">
       <span class="file-icon">
         <i class="fas fa-upload"></i>
       </span>
       <span class="file-label">
-        Upload new
+        Choose a file…
       </span>
     </span>
   </label>
 </div>
 
+  <p class="control">
+    <button class="button is-primary" href="/merchant/template/preview">
+      Upload template
+    </button>
+</div>
+</form>
+
 <div class="field is-grouped">
   <p class="control">
-    <a class="button is-primary">
-      Preview current theme
+    <a class="button is-primary" href="/merchant/template/preview">
+      Preview current template
     </a>
   </p>
   <p class="control">
     <a class="button is-primary" href="/merchant/theme?set=default">
-      Set default theme
+      Set default template
     </a>
   </p>
 </div>

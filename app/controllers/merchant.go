@@ -42,6 +42,17 @@ func MerchantRequestPayment(c *fiber.Ctx) error {
 	}, "layouts/merchant-panel")
 }
 
+func MerchantPostRequestPayment(c *fiber.Ctx) error {
+	//t := c.Cookies("token")
+	// Create payment, then serve template page.
+	//resp, err := config.Api.PostMerchantPayment(t)
+	//if err != nil {
+	//	return serveErrorPage(c, http.StatusInternalServerError, err.Error())
+	//}
+	// TODO
+	return c.Render("Template name", fiber.Map{})
+}
+
 func MerchantWithdrawals(c *fiber.Ctx) error {
 	t := c.Cookies("token")
 	resp, err := config.Api.GetMerchantWithdrawals(t)
@@ -55,11 +66,39 @@ func MerchantWithdrawals(c *fiber.Ctx) error {
 	}, "layouts/merchant-panel")
 }
 
-func MerchantTheme(c *fiber.Ctx) error {
+func MerchantTemplate(c *fiber.Ctx) error {
 	return c.Render("merchant-theme", fiber.Map{
 		"Username":  token.GetUsername(c),
 		"PageTitle": "Theme",
 	}, "layouts/merchant-panel")
+}
+
+func MerchantTemplatePreview(c *fiber.Ctx) error {
+	t := c.Cookies("token")
+	content, err := config.Api.MerchantTemplatePreview(t)
+	if err != nil {
+		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
+	}
+	c.Set(fiber.HeaderContentType, fiber.MIMETextHTML)
+	return c.Send(content)
+}
+
+func MerchantTemplateUpload(c *fiber.Ctx) error {
+	t := c.Cookies("token")
+	file, err := c.FormFile("file")
+	if err != nil {
+		return serveErrorPage(c, http.StatusBadRequest, err.Error())
+	}
+	f, err := file.Open()
+	if err != nil {
+		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
+	}
+	defer f.Close()
+	if err := config.Api.MerchantTemplateUpload(t, f); err != nil {
+		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
+	}
+	// TODO: saved=true
+	return c.Redirect("/merchant/template")
 }
 
 func MerchantAccount(c *fiber.Ctx) error {
