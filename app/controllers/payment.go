@@ -17,6 +17,7 @@ func GetPaymentPage(c *fiber.Ctx) error {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 	}
 	c.Set(fiber.HeaderContentType, fiber.MIMETextHTML)
+	c.Set("Refresh", "10")
 	return c.Send(resp)
 }
 

@@ -21,16 +21,16 @@ func main() {
 	app.Post("/register", controllers.PostRegister)
 	app.Get("/logout", controllers.GetLogout)
 	app.Get("/", controllers.GetLogin)
+	app.Get("/p/:id", controllers.GetPaymentPage)
 
-	app.Use(jwtware.New(jwtware.Config{
+	merchant := app.Group("/merchant")
+	merchant.Use(jwtware.New(jwtware.Config{
 		SigningKey:  []byte(config.JwtSecret),
 		TokenLookup: "cookie:token",
 		ErrorHandler: func(c *fiber.Ctx, err error) error {
 			return c.Redirect("/login?expired=true")
 		},
 	}))
-
-	merchant := app.Group("/merchant")
 	merchant.Use(server.MerchantJwtMiddleware)
 	merchant.Get("/account", controllers.MerchantAccount)
 	merchant.Get("/dashboard", controllers.MerchantDashboard)
@@ -44,6 +44,13 @@ func main() {
 	merchant.Post("/template/reset", controllers.MerchantTemplateReset)
 
 	admin := app.Group("/admin")
+	admin.Use(jwtware.New(jwtware.Config{
+		SigningKey:  []byte(config.JwtSecret),
+		TokenLookup: "cookie:token",
+		ErrorHandler: func(c *fiber.Ctx, err error) error {
+			return c.Redirect("/login?expired=true")
+		},
+	}))
 	admin.Use(server.AdminJwtMiddleware)
 	admin.Get("/dashboard", controllers.AdminDashboard)
 	admin.Get("/instance", controllers.AdminInstance)
@@ -54,8 +61,6 @@ func main() {
 	admin.Get("/merchants/:id", controllers.AdminGetMerchant)
 	admin.Post("/merchants/:id", controllers.AdminEditMerchant)
 	admin.Post("/merchants/delete/:id", controllers.AdminDeleteMerchant)
-
-	app.Get("/p/:id", controllers.GetPaymentPage)
 
 	app.StartServerWithGracefulShutdown()
 }
