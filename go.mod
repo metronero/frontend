@@ -2,6 +2,8 @@ module gitlab.com/metronero/frontend
 
 go 1.20
 
+replace gitlab.com/metronero/backend => /home/siren/metronero-backend
+
 require (
 	github.com/gofiber/fiber/v2 v2.43.0
 	github.com/gofiber/jwt/v3 v3.3.7

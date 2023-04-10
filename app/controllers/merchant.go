@@ -35,24 +35,6 @@ func MerchantPayments(c *fiber.Ctx) error {
 	}, "layouts/merchant-panel")
 }
 
-func MerchantRequestPayment(c *fiber.Ctx) error {
-	return c.Render("merchant-request-payment", fiber.Map{
-		"Username":  token.GetUsername(c),
-		"PageTitle": "Request Payment",
-	}, "layouts/merchant-panel")
-}
-
-func MerchantPostRequestPayment(c *fiber.Ctx) error {
-	//t := c.Cookies("token")
-	// Create payment, then serve template page.
-	//resp, err := config.Api.PostMerchantPayment(t)
-	//if err != nil {
-	//	return serveErrorPage(c, http.StatusInternalServerError, err.Error())
-	//}
-	// TODO
-	return c.Render("Template name", fiber.Map{})
-}
-
 func MerchantWithdrawals(c *fiber.Ctx) error {
 	t := c.Cookies("token")
 	resp, err := config.Api.GetMerchantWithdrawals(t)

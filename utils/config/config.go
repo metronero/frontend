@@ -8,6 +8,7 @@ import (
 )
 
 var (
+	Hostname  string
 	Bind      string
 	Debug     bool
 	Backend   string
@@ -17,6 +18,7 @@ var (
 )
 
 func Load() {
+	flag.StringVar(&Hostname, "hostname", "http://localhost:5002", "User facing hostname or domain name with protocol scheme")
 	flag.StringVar(&Bind, "bind", ":5002", "Bind address")
 	flag.BoolVar(&Debug, "debug", false, "Debug mode")
 	flag.StringVar(&Backend, "backend", "http://localhost:5001", "Metronero backend host:port")

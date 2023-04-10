@@ -36,7 +36,8 @@ func main() {
 	merchant.Get("/dashboard", controllers.MerchantDashboard)
 	merchant.Get("/payments", controllers.MerchantPayments)
 	merchant.Get("/withdrawals", controllers.MerchantWithdrawals)
-	merchant.Get("/request", controllers.MerchantRequestPayment)
+	merchant.Get("/request", controllers.MerchantRequestPaymentForm)
+	merchant.Post("/request", controllers.MerchantRequestPayment)
 	merchant.Get("/template", controllers.MerchantTemplate)
 	merchant.Get("/template/preview", controllers.MerchantTemplatePreview)
 	merchant.Post("/template", controllers.MerchantTemplateUpload)
@@ -53,6 +54,8 @@ func main() {
 	admin.Get("/merchants/:id", controllers.AdminGetMerchant)
 	admin.Post("/merchants/:id", controllers.AdminEditMerchant)
 	admin.Post("/merchants/delete/:id", controllers.AdminDeleteMerchant)
+
+	app.Get("/p/:id", controllers.GetPaymentPage)
 
 	app.StartServerWithGracefulShutdown()
 }

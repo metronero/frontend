@@ -2,9 +2,9 @@ package controllers
 
 import (
 	"net/http"
-	"strconv"
 	"log"
 	"fmt"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 	"gitlab.com/moneropay/go-monero/walletrpc"
@@ -63,16 +63,13 @@ func AdminEditInstance(c *fiber.Ctx) error {
 		err error
 	)
 
-
 	if conf.CustodialMode, err = strconv.ParseBool(custodialMode); err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 	}
 
-	floatCommission, err := strconv.ParseFloat(defaultCommission, 64)
-	if err != nil {
+	if conf.DefaultCommission, err = toAtomic(defaultCommission); err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 	}
-	conf.DefaultCommission = uint64(floatCommission * 1000000000000)
 
 	if conf.RegistrationsAllowed, err = strconv.ParseBool(registrationsAllowed); err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
