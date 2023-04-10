@@ -32,7 +32,7 @@
   {{ range .Withdrawals }}
     <tr>
       <td>{{ .MerchantName }}</td>
-      <td>{{ .Amount }} XMR</td>
+      <td>{{ .AmountFloat }} XMR</td>
       <td>{{ .Date }}</td>
     </tr>
     {{ end }}

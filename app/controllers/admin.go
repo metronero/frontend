@@ -19,6 +19,10 @@ func AdminDashboard(c *fiber.Ctx) error {
 	if err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 	}
+
+	for i, w := range resp.RecentWithdrawals {
+		resp.RecentWithdrawals[i].AmountFloat = walletrpc.XMRToDecimal(w.Amount)
+	}
 	return c.Render("admin-dashboard", fiber.Map{
 		"PageTitle":   "Dashboard",
 		"Balance":     walletrpc.XMRToDecimal(resp.Stats.WalletBalance),
@@ -37,10 +41,14 @@ func AdminInstance(c *fiber.Ctx) error {
 	if err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 	}
+
+	resp.Details.DefaultCommissionFloat = walletrpc.XMRToDecimal(resp.Details.DefaultCommission)
+	resp.Stats.WalletBalanceFloat = walletrpc.XMRToDecimal(resp.Stats.WalletBalance)
+	resp.Stats.TotalProfitsFloat = walletrpc.XMRToDecimal(resp.Stats.TotalProfits)
+
 	return c.Render("admin-instance", fiber.Map{
 		"PageTitle": "Instance",
 		"InstanceInfo": resp,
-		"DefaultCommission": walletrpc.XMRToDecimal(resp.Details.DefaultCommission),
 		"Success": success,
 		"Failed": failed,
 		"Missing": missing,
@@ -92,6 +100,9 @@ func AdminWithdrawals(c *fiber.Ctx) error {
 	if err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 	}
+	for i, w := range resp {
+		resp[i].AmountFloat = walletrpc.XMRToDecimal(w.Amount)
+	}
 	return c.Render("admin-withdrawals", fiber.Map{
 		"PageTitle": "Withdrawals",
 		"Withdrawals": resp,
@@ -103,6 +114,10 @@ func AdminPayments(c *fiber.Ctx) error {
 	resp, err := config.Api.AdminGetPayments(token)
 	if err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
+	}
+	for i, p := range resp {
+		resp[i].AmountFloat = walletrpc.XMRToDecimal(p.Amount)
+		resp[i].FeeFloat = walletrpc.XMRToDecimal(p.Fee)
 	}
 	return c.Render("admin-payments", fiber.Map{
 		"PageTitle": "Payments",

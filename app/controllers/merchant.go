@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
+	"gitlab.com/moneropay/go-monero/walletrpc"
 
 	"gitlab.com/metronero/frontend/utils/config"
 	"gitlab.com/metronero/frontend/utils/token"
@@ -15,6 +16,14 @@ func MerchantDashboard(c *fiber.Ctx) error {
 	if err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 	}
+
+	resp.Stats.BalanceFloat = walletrpc.XMRToDecimal(resp.Stats.Balance)
+	resp.Stats.TotalSalesFloat = walletrpc.XMRToDecimal(resp.Stats.TotalSales)
+	for i, p := range resp.RecentPayments {
+		resp.RecentPayments[i].AmountFloat = walletrpc.XMRToDecimal(p.Amount)
+		resp.RecentPayments[i].FeeFloat = walletrpc.XMRToDecimal(p.Fee)
+	}
+
 	return c.Render("merchant-dashboard", fiber.Map{
 		"Username":  token.GetUsername(c),
 		"PageTitle": "Dashboard",
@@ -28,6 +37,10 @@ func MerchantPayments(c *fiber.Ctx) error {
 	if err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 	}
+	for i, p := range resp {
+		resp[i].AmountFloat = walletrpc.XMRToDecimal(p.Amount)
+		resp[i].FeeFloat = walletrpc.XMRToDecimal(p.Fee)
+	}
 	return c.Render("merchant-payments", fiber.Map{
 		"Username":  token.GetUsername(c),
 		"PageTitle": "Payments",
@@ -38,6 +51,9 @@ func MerchantPayments(c *fiber.Ctx) error {
 func MerchantWithdrawals(c *fiber.Ctx) error {
 	t := c.Cookies("token")
 	resp, err := config.Api.GetMerchantWithdrawals(t)
+	for i, w := range resp {
+		resp[i].AmountFloat = walletrpc.XMRToDecimal(w.Amount)
+	}
 	if err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 	}

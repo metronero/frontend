@@ -1,10 +1,10 @@
 <section class="hero">
   <div class="hero-body">
     <p class="title">
-      Your balance: {{ .Merchant.Stats.Balance }} XMR
+      Your balance: {{ .Merchant.Stats.BalanceFloat }} XMR
     </p>
     <p class="subtitle">
-      Total sales: {{ .Merchant.Stats.TotalSales }} XMR
+      Total sales: {{ .Merchant.Stats.TotalSalesFloat }} XMR
     </p>
     <div class="buttons">
       <a class="button is-primary" href="/merchant/request">Request payment</a>
@@ -32,7 +32,7 @@
   {{ range .Merchant.RecentPayments }}
     <tr>
       <td>{{ .InvoiceId }}</td>
-      <td>{{ .Amount }} XMR</td>
+      <td>{{ .AmountFloat }} XMR</td>
       <td>{{ .Status }}</td>
       <td>{{ .LastUpdate }}</td>
     </tr>
