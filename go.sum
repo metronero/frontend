@@ -380,6 +380,8 @@ github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9dec
 github.com/yuin/goldmark v1.3.5/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1Zlc8k=
 github.com/yuin/goldmark v1.4.1/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1Zlc8k=
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
+gitlab.com/metronero/backend v0.0.0-20230409200421-4bfc90f6f2a4 h1:YrQybHILonumSY5+T9Ydn7w7lgFuLLkGEnHrBwiZYnM=
+gitlab.com/metronero/backend v0.0.0-20230409200421-4bfc90f6f2a4/go.mod h1:RJgPeIYL+Knc9+2PPXclLTA2dVEAbGXMWYazILesMu4=
 gitlab.com/moneropay/go-monero v1.1.0 h1:30pfEUORwjEyRR20jEQ2zZguud08vvxBijlaHJwUNc0=
 gitlab.com/moneropay/go-monero v1.1.0/go.mod h1:k7fElrhjex1ktCy45ebcgz66oGBeOtciBZA405s3Oz0=
 go.etcd.io/etcd/api/v3 v3.5.1/go.mod h1:cbVKeC6lCfl7j/8jBhAK6aIYO9XOjdptoxU/nLQcPvs=
