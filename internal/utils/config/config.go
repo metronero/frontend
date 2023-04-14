@@ -14,7 +14,7 @@ var (
 	Backend   string
 	Uname     string
 	JwtSecret string
-	Api *api.ApiClient
+	Api       *api.ApiClient
 )
 
 func Load() {
@@ -22,9 +22,9 @@ func Load() {
 	flag.StringVar(&Bind, "bind", ":5002", "Bind address")
 	flag.BoolVar(&Debug, "debug", false, "Debug mode")
 	flag.StringVar(&Backend, "backend", "http://localhost:5001", "Metronero backend host:port")
-	flag.StringVar(&JwtSecret, "token-secret", "", "Secret for authentication tokens, same as backend")
+	flag.StringVar(&JwtSecret, "token-secret", "secret", "Secret for authentication tokens, same as backend")
 	Api = &api.ApiClient{
-		Client: http.DefaultClient,
+		Client:  http.DefaultClient,
 		BaseUrl: Backend,
 	}
 	flag.Parse()

@@ -5,7 +5,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 
-	"gitlab.com/metronero/frontend/utils/config"
+	"gitlab.com/metronero/frontend/internal/utils/config"
 )
 
 func GetLogin(c *fiber.Ctx) error {
@@ -18,7 +18,7 @@ func GetLogin(c *fiber.Ctx) error {
 	exp := c.Query("expired", "false")
 	return c.Render("login", fiber.Map{
 		"Registered": reg,
-		"Expired": exp,
+		"Expired":    exp,
 	})
 }
 
@@ -27,9 +27,9 @@ func PostLogin(c *fiber.Ctx) error {
 	password := c.FormValue("password")
 	if username == "" || password == "" {
 		return serveErrorPage(c, http.StatusBadRequest,
-		    "Required form fields must not be empty")
+			"Required form fields must not be empty")
 	}
-	token, err := config.Api.UserLogin(username, password)
+	token, err := config.Api.PostLogin(username, password)
 	if err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 	}
@@ -57,9 +57,9 @@ func PostRegister(c *fiber.Ctx) error {
 	password := c.FormValue("password")
 	if username == "" || password == "" {
 		return serveErrorPage(c, http.StatusBadRequest,
-		    "Required form fields must not be empty")
+			"Required form fields must not be empty")
 	}
-	if err := config.Api.UserRegister(username, password); err != nil {
+	if err := config.Api.PostRegister(username, password); err != nil {
 		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
 	}
 	return c.Redirect("/login?success=true")

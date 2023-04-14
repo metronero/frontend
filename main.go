@@ -1,8 +1,8 @@
 package main
 
 import (
-	"gitlab.com/metronero/frontend/utils/config"
-	"gitlab.com/metronero/frontend/utils/server"
+	"gitlab.com/metronero/frontend/internal/utils/config"
+	"gitlab.com/metronero/frontend/internal/utils/server"
 )
 
 func main() {

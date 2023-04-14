@@ -4,8 +4,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 	jwtware "github.com/gofiber/jwt/v3"
 
-	"gitlab.com/metronero/frontend/app/controllers"
-	"gitlab.com/metronero/frontend/utils/config"
+	"gitlab.com/metronero/frontend/internal/app/controllers"
+	"gitlab.com/metronero/frontend/internal/utils/config"
 )
 
 func (s *Server) RegisterRoutes() {
@@ -28,16 +28,16 @@ func (s *Server) RegisterRoutes() {
 		},
 	}))
 	merchant.Use(MerchantJwtMiddleware)
-	merchant.Get("/account", controllers.MerchantAccount)
-	merchant.Get("/dashboard", controllers.MerchantDashboard)
-	merchant.Get("/payments", controllers.MerchantPayments)
-	merchant.Get("/withdrawals", controllers.MerchantWithdrawals)
-	merchant.Get("/request", controllers.MerchantRequestPaymentForm)
-	merchant.Post("/request", controllers.MerchantRequestPayment)
-	merchant.Get("/template", controllers.MerchantTemplate)
-	merchant.Get("/template/preview", controllers.MerchantTemplatePreview)
-	merchant.Post("/template", controllers.MerchantTemplateUpload)
-	merchant.Post("/template/reset", controllers.MerchantTemplateReset)
+	merchant.Get("/account", controllers.GetMerchantAccount)
+	merchant.Get("/dashboard", controllers.GetMerchantDashboard)
+	merchant.Get("/payments", controllers.GetMerchantPayments)
+	merchant.Get("/withdrawals", controllers.GetMerchantWithdrawals)
+	merchant.Get("/request", controllers.GetMerchantRequest)
+	merchant.Post("/request", controllers.PostMerchantRequest)
+	merchant.Get("/template", controllers.GetMerchantTemplate)
+	merchant.Get("/template/preview", controllers.GetMerchantTemplatePreview)
+	merchant.Post("/template", controllers.PostMerchantTemplate)
+	merchant.Post("/template/reset", controllers.PostMerchantTemplateReset)
 
 	admin := s.Group("/admin")
 	admin.Use(jwtware.New(jwtware.Config{
@@ -48,11 +48,11 @@ func (s *Server) RegisterRoutes() {
 		},
 	}))
 	admin.Use(AdminJwtMiddleware)
-	admin.Get("/dashboard", controllers.AdminDashboard)
-	admin.Get("/instance", controllers.AdminInstance)
-	admin.Post("/instance", controllers.AdminEditInstance)
-	admin.Get("/withdrawals", controllers.AdminWithdrawals)
-	admin.Get("/payments", controllers.AdminPayments)
+	admin.Get("/dashboard", controllers.GetAdminDashboard)
+	admin.Get("/instance", controllers.GetAdminInstance)
+	admin.Post("/instance", controllers.PostAdminInstance)
+	admin.Get("/withdrawals", controllers.GetAdminWithdrawals)
+	admin.Get("/payments", controllers.GetAdminPayments)
 	admin.Get("/merchants", controllers.AdminMerchants)
 	admin.Get("/merchants/:id", controllers.AdminGetMerchant)
 	admin.Post("/merchants/:id", controllers.AdminEditMerchant)
