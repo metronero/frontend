@@ -1,6 +1,6 @@
 module gitlab.com/metronero/frontend
 
-go 1.20
+go 1.19
 
 //replace gitlab.com/metronero/backend => /home/siren/metronero-backend
 
@@ -10,7 +10,7 @@ require (
 	github.com/gofiber/template v1.8.0
 	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/namsral/flag v1.7.4-pre
-	gitlab.com/metronero/backend v0.0.0-20230409200421-4bfc90f6f2a4
+	gitlab.com/metronero/metronero-go v0.0.0-20230807194828-e271ebf66708
 	gitlab.com/moneropay/go-monero v1.1.0
 )
 

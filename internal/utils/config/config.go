@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/namsral/flag"
-	"gitlab.com/metronero/backend/pkg/api"
+	"gitlab.com/metronero/metronero-go/api"
 )
 
 var (

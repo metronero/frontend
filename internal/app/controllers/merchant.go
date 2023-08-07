@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
-	"gitlab.com/metronero/backend/pkg/models"
+	"gitlab.com/metronero/metronero-go/models"
 	"gitlab.com/moneropay/go-monero/walletrpc"
 
 	"gitlab.com/metronero/frontend/internal/utils/config"
