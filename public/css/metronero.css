@@ -44,3 +44,27 @@
 .icon img {filter: invert(1);}
 
 }
+
+#side-menu {
+	height: 100%;
+}
+
+.lang-dropdown-button {
+	border: none;
+	background: none;
+}
+
+#lang-toggle {
+  display: none;
+}
+
+#lang-toggle:checked ~ #lang-menu {
+  display: block;
+}
+
+#lang-modal-toggle {
+  display: none;
+}
+#lang-modal-toggle:checked ~ #lang-modal {
+  display: flex;
+}

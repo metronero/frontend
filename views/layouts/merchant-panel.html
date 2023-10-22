@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/assets/css/main.css">
     <link rel="stylesheet" href="/assets/css/metronero.css">
+    <link rel="stylesheet" href="/assets/forkawesome/css/fork-awesome.min.css">
     <link rel="icon" type="image/png" href="/assets/img/metronero.png" sizes="32x32">
     <title>{{ .PageTitle }} | Metronero</title>
   </head>
@@ -30,6 +31,32 @@
           <a class="navbar-item is-hoverable is-hidden-desktop" target="new" href="/merchant/template">Template</a>
           <a class="navbar-item is-hoverable is-hidden-desktop" target="new" href="/merchant/payments">Payments</a>
           <a class="navbar-item is-hoverable is-hidden-desktop" target="new" href="/merchant/withdrawals">Withdrawals</a>
+          <div class="navbar-item is-hoverable is-hidden-desktop" target="new">
+            <label for="lang-modal-toggle">
+              <span class="icon is-large" aria-haspopup="true" aria-controls="dropdown-menu" >
+              <i class="fa fa-2x fa-language" aria-hidden="true"></i>
+              </span>
+	    </label>
+	<input id="lang-modal-toggle" type="checkbox" />
+        <!-- Modal -->
+        <div class="modal" id="lang-modal">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Change language</p>
+            </header>
+            <section class="modal-card-foot">
+              <ul>
+                <li><a href="/pref/en?back={{.curr_url}}">English</a></li>
+                <li><a href="/pref/tr?back={{.curr_url}}">Türkçe</a></li>
+                <li><a href="/pref/lt?back={{.curr_url}}">Lietuvių</a></li>
+             </ul>
+           </section>
+	  </div>
+       <label class="modal-close is-large" for="lang-modal-toggle"></label>
+	</div>
+     </div>
+
     </div>
 
     <div class="navbar-end">
@@ -61,7 +88,7 @@
 
 <div class="columns">
 <div class="column is-narrow is-hidden-touch">
-<aside class="menu">
+<aside class="menu" id="side-menu">
   <p class="menu-label">
     General
   </p>
@@ -74,6 +101,9 @@
   <ul class="menu-list">
     <li><a href="/merchant/template">Template</a></li>
   </ul>
+  <ul class="menu-list">
+    <li><a href="#">Authentication</a></li>
+  </ul>
   <p class="menu-label">
     Transactions
   </p>
@@ -82,7 +112,37 @@
     <li><a href="/merchant/withdrawals">Withdrawals</a></li>
   </ul>
 </aside>
+
+<div class="dropdown is-up">
+  <input id="lang-toggle" type="checkbox" />
+  <div class="dropdown-trigger">
+    <button class="button lang-dropdown-button" aria-haspopup="true" aria-controls="dropdown-menu">
+      <label for="lang-toggle">
+      <span class="icon is-large" aria-haspopup="true" aria-controls="dropdown-menu" >
+        <i class="fa fa-2x fa-language" aria-hidden="true"></i>
+      </span>
+</label>
+    </button>
+  </div>
+  <div class="dropdown-menu" id="lang-menu" role="menu">
+    <div class="dropdown-content">
+      <div class="dropdown-item">
+        <p><a href="/pref/en?back={{.curr_url}}">English</a></p>
+      </div>
+      <hr class="dropdown-divider">
+      <div class="dropdown-item">
+        <p><a href="/pref/tr?back={{.curr_url}}">Türkçe</a></p>
+      </div>
+      <hr class="dropdown-divider">
+      <div class="dropdown-item">
+        <p><a href="/pref/lt?back={{.curr_url}}">Lietuvių</a></p>
+      </div>
+    </div>
+  </div>
 </div>
+
+</div>
+
 
 <div class="column">
 {{embed}}

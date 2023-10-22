@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
+	"gitlab.com/metronero/metronero-go/models"
 
 	"gitlab.com/metronero/frontend/internal/utils/config"
 )
@@ -48,24 +49,20 @@ func PostLogin(c *fiber.Ctx) error {
 	return c.Redirect("/merchant/dashboard")
 }
 
-func GetRegister(c *fiber.Ctx) error {
-	return c.Render("register", nil)
-}
-
-func PostRegister(c *fiber.Ctx) error {
-	username := c.FormValue("username")
-	password := c.FormValue("password")
-	if username == "" || password == "" {
-		return serveErrorPage(c, http.StatusBadRequest,
-			"Required form fields must not be empty")
-	}
-	if err := config.Api.PostRegister(username, password); err != nil {
-		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
-	}
-	return c.Redirect("/login?success=true")
-}
-
 func GetLogout(c *fiber.Ctx) error {
 	c.ClearCookie("token")
 	return c.Redirect("/login")
+}
+
+func AdminCreateMerchant(c *fiber.Ctx) error {
+	username := c.FormValue("username")
+	password := c.FormValue("password")
+
+	token := c.Cookies("token")
+	if err := config.Api.PostAdminRegister(token, &models.NewAccount{
+			Username: username, Password: password, Role: "shop",
+		}); err != nil {
+		return serveErrorPage(c, http.StatusInternalServerError, err.Error())
+	}
+	return c.Redirect("/admin/merchants?created=true")
 }

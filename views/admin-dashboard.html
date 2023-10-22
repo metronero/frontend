@@ -4,7 +4,7 @@
       Wallet balance: {{ .Balance }} XMR
     </p>
     <p class="subtitle">
-      Total profits: {{ .Profits }} XMR
+      Total sales: {{ .Profits }} XMR
     </p>
     <div class="buttons">
       <a class="button is-primary" href="/admin/instance">Manage instance</a>
@@ -15,8 +15,8 @@
 
 
 <section class="section">
-<p class="title is-spaced">Recent withdrawals</p>
-{{ if not .Withdrawals }}
+<p class="title is-spaced">Recent payments</p>
+{{ if not .Payments }}
 <p class="subtitle">Nothing yet.</p>
 {{ else }}
 <div class="table-container">
@@ -24,22 +24,28 @@
   <thead>
     <tr>
       <th>Merchant</th>
+      <th>Invoice ID</th>
       <th>Amount</th>
-      <th>Date</th>
+      <th>Fee</th>
+      <th>Status</th>
+      <th><abbr title="Date of completion or last update.">Date</abbr></th>
     </tr>
   </thead>
   <tbody>
-  {{ range .Withdrawals }}
+  {{ range .Payments }}
     <tr>
       <td>{{ .MerchantName }}</td>
+      <td>{{ .InvoiceId }}</td>
       <td>{{ .AmountFloat }} XMR</td>
-      <td>{{ .Date }}</td>
+      <td>{{ .FeeFloat }} XMR</td>
+      <td>{{ .Status }}</td>
+      <td>{{ .LastUpdate }}</td>
     </tr>
-    {{ end }}
+  {{ end }}
   </tbody>
 </table>
 </div>
-
-<a class="button is-primary is-pulled-right" href="/admin/withdrawals">Go to withdrawal history</a>
 {{ end }}
+
+<a class="button is-primary is-pulled-right" href="/admin/payments">Go to payment history</a>
 </section>
