@@ -56,6 +56,16 @@ const router = createRouter({
                     path: '/merchant/settings',
                     name: 'merchant-settings',
                     component: () => import('@/views/merchant/Settings.vue')
+                },
+                {
+                    path: '/merchant/template',
+                    name: 'merchant-template',
+                    component: () => import('@/views/merchant/Template.vue')
+                },
+                {
+                    path: '/merchant/apikeys',
+                    name: 'merchant-apikeys',
+                    component: () => import('@/views/merchant/ApiKeys.vue')
                 }
             ]
         },

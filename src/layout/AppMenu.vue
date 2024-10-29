@@ -25,7 +25,7 @@ const adminMenu = ref([
     {
         label: 'Home',
         items: [
-            { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' },
+            { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/admin/dashboard' },
             { label: 'Invoices', icon: 'pi pi-fw pi-shopping-cart', to: '/admin/invoices' },
             { label: 'Withdrawals', icon: 'pi pi-fw pi-dollar', to: '/admin/withdrawals' },
             { label: 'Merchants', icon: 'pi pi-fw pi-users', to: '/admin/merchants' }
@@ -61,13 +61,15 @@ const merchantMenu = ref([
     {
         label: 'Home',
         items: [
-            { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' },
-            { label: 'Invoices', icon: 'pi pi-fw pi-shopping-cart', to: '/merchant/invoices' }
+            { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/merchant/dashboard' },
+            { label: 'Invoices', icon: 'pi pi-fw pi-shopping-cart', to: '/merchant/invoices' },
+            { label: 'Template', icon: 'pi pi-fw pi-file', to: '/merchant/template' }
         ]
     },
     {
         label: 'Account',
         items: [
+            { label: 'API Keys', icon: 'pi pi-fw pi-key', to: '/merchant/apikeys' },
             { label: 'Settings', icon: 'pi pi-fw pi-cog', to: '/merchant/settings' },
             {
                 label: 'Log out',

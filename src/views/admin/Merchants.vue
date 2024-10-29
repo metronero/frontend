@@ -57,7 +57,6 @@ function saveMerchant() {
 
     if (merchant?.value.name?.trim()) {
         if (merchant.value.id) {
-            merchant.value.inventoryStatus = merchant.value.inventoryStatus.value ? merchant.value.inventoryStatus.value : merchant.value.inventoryStatus;
             merchants.value[findIndexById(merchant.value.id)] = merchant.value;
             toast.add({ severity: 'success', summary: 'Successful', detail: 'Merchant Updated', life: 3000 });
         } else {
@@ -66,6 +65,14 @@ function saveMerchant() {
                 .then((response) => {
                     console.log(response.data);
                     merchant.value.id = response.data.id;
+
+                    // Move this inside the .then block to ensure the ID is available
+                    merchants.value.push(merchant.value);
+                    toast.add({ severity: 'success', summary: 'Successful', detail: 'Merchant Created', life: 3000 });
+
+                    // Hide the dialog and reset the merchant object
+                    merchantDialog.value = false;
+                    merchant.value = {};
                 })
                 .catch((error) => {
                     console.log(error);
@@ -75,13 +82,7 @@ function saveMerchant() {
                         toast.add({ severity: 'error', summary: error.message, detail: error.code, life: 3000 });
                     }
                 });
-
-            merchants.value.push(merchant.value);
-            toast.add({ severity: 'success', summary: 'Successful', detail: 'Merchant Created', life: 3000 });
         }
-
-        merchantDialog.value = false;
-        merchant.value = {};
     }
 }
 

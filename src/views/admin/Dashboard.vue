@@ -99,10 +99,6 @@ function piconerosToMonero(piconeros) {
 onMounted(() => {
     getDashboardInfo();
 });
-
-const formatCurrency = (value) => {
-    return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-};
 </script>
 
 <template>
