@@ -15,6 +15,7 @@ const activeMerchants = ref(0);
 const instanceHealth = ref(true);
 const instanceVersion = ref('v0.0.0');
 const isLoading = ref(true);
+const recentInvoices = ref();
 
 function getDashboardInfo() {
     isLoading.value = true;
@@ -24,6 +25,22 @@ function getDashboardInfo() {
             console.log(response.data);
             totalInvoices.value = response.data.count;
             pendingInvoices.value = response.data.pending;
+        })
+        .catch((error) => {
+            console.log(error);
+            if (error.response.status == 401) {
+                toast.add({ severity: 'error', summary: 'Not logged in', detail: error.code, life: 3000 });
+                push({ path: '/auth/login' });
+            } else {
+                toast.add({ severity: 'error', summary: error.message, detail: error.code, life: 3000 });
+            }
+        });
+
+    axios
+        .get(import.meta.env.VITE_API_BASE + '/admin/invoice/recent', { withCredentials: true })
+        .then((response) => {
+            console.log(response.data);
+            recentInvoices.value = response.data;
         })
         .catch((error) => {
             console.log(error);
@@ -173,14 +190,23 @@ onMounted(() => {
         <div class="col-span-12 xl:col-span-6">
             <div class="card">
                 <div class="font-semibold text-xl mb-4">Recent Invoices</div>
-                <DataTable :value="products" :rows="5" :paginator="true" responsiveLayout="scroll">
-                    <Column field="name" header="Name" :sortable="true" style="width: 35%"></Column>
-                    <Column field="price" header="Price" :sortable="true" style="width: 35%">
+                <DataTable v-if="recentInvoices" :value="recentInvoices" :rows="5" :paginator="true" responsiveLayout="scroll">
+                    <Column field="invoice_id" header="Invoice ID" :sortable="true"></Column>
+                    <Column header="Amount" :sortable="true">
                         <template #body="slotProps">
-                            {{ formatCurrency(slotProps.data.price) }}
+                            {{ piconerosToMonero(slotProps.data.amount) }}
                         </template>
                     </Column>
+                    <Column field="order_id" header="Order ID" :sortable="true"></Column>
+                    <Column field="status" header="Status" :sortable="true"></Column>
+                    <Column field="last_update" header="Last Update" :sortable="true"></Column>
                 </DataTable>
+                <div class="flex items-center justify-center align-center" v-else>
+                    <div class="text-center">
+                        <p class="mb-4">Nothing yet. Create an invoice to get started.</p>
+                        <Button as="router-link" to="/merchant/invoices">Go to Invoices</Button>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-span-12 xl:col-span-6">
