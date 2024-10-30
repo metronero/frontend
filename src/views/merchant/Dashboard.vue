@@ -157,7 +157,14 @@ onMounted(() => {
                         </template>
                     </Column>
                     <Column field="order_id" header="Order ID" :sortable="true"></Column>
-                    <Column field="status" header="Status" :sortable="true"></Column>
+                    <Column field="status" header="Status" :sortable="true">
+                        <template #body="slotProps">
+                            <Tag v-if="slotProps.data.status === 'Completed'" value="Finished" severity="success" />
+                            <Tag v-else-if="slotProps.data.status === 'Pending'" value="Pending" severity="warning" />
+                            <Tag v-else-if="slotProps.data.status === 'Cancelled'" value="Cancelled" severity="danger" />
+                            <Tag v-else value="Other" severity="info" />
+                        </template>
+                    </Column>
                     <Column field="last_update" header="Last Update" :sortable="true"></Column>
                 </DataTable>
                 <div class="flex items-center justify-center align-center" v-else>

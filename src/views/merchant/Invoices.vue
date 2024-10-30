@@ -92,6 +92,18 @@ function deleteInvoice() {
     toast.add({ severity: 'success', summary: 'Successful', detail: 'Invoice Deleted', life: 3000 });
 }
 
+function copyLinkToClipboard(invoiceId) {
+    const link = `${apiBaseUrl}/p/${invoiceId}`;
+    navigator.clipboard
+        .writeText(link)
+        .then(() => {
+            toast.add({ severity: 'success', summary: 'Copied', detail: 'Invoice link copied to clipboard', life: 3000 });
+        })
+        .catch((error) => {
+            toast.add({ severity: 'error', summary: 'Copy Failed', detail: error.message, life: 3000 });
+        });
+}
+
 function exportCSV() {
     dt.value.exportCSV();
 }
@@ -100,6 +112,8 @@ function exportCSV() {
 <template>
     <div>
         <div class="card">
+            <h1 class="font-semibold text-xl mb-5">Invoices</h1>
+
             <Toolbar class="mb-6">
                 <template #start>
                     <Button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" @click="openNew" />
@@ -124,7 +138,6 @@ function exportCSV() {
             >
                 <template #header>
                     <div class="flex justify-between">
-                        <h4 class="m-0">Manage Invoices</h4>
                         <InputText v-model="filters['global'].value" placeholder="Search..." />
                     </div>
                 </template>
@@ -135,7 +148,7 @@ function exportCSV() {
                 <Column field="order_id" header="Order ID" sortable style="min-width: 12rem"></Column>
                 <Column field="status" header="Status" sortable style="min-width: 10rem">
                     <template #body="slotProps">
-                        <Tag v-if="slotProps.data.status === 'finished'" value="Finished" severity="success" />
+                        <Tag v-if="slotProps.data.status === 'Completed'" value="Finished" severity="success" />
                         <Tag v-else-if="slotProps.data.status === 'Pending'" value="Pending" severity="warning" />
                         <Tag v-else-if="slotProps.data.status === 'Cancelled'" value="Cancelled" severity="danger" />
                         <Tag v-else value="Other" severity="info" />
@@ -143,9 +156,7 @@ function exportCSV() {
                 </Column>
                 <Column field="last_update" header="Last Update" sortable style="min-width: 12rem"></Column>
                 <Column header="Page Link" :exportable="false" style="min-width: 10rem">
-                    <template #body="slotProps">
-                        <Button icon="pi pi-link" outlined rounded severity="success" as="a" :href="apiBaseUrl + '/p/' + slotProps.data.invoice_id" />
-                    </template>
+                    <template #body="slotProps"> <Button icon="pi pi-copy" label="Copy Link" @click="copyLinkToClipboard(slotProps.data.invoice_id)" /> </template>
                 </Column>
             </DataTable>
         </div>
