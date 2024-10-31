@@ -22,9 +22,11 @@ function login() {
         .then((response) => {
             console.log(response.data);
             localStorage.setItem('account_role', response.data.role);
+            localStorage.setItem('account_id', response.data.account_id);
             localStorage.setItem('account_name', username.value);
             sessionStore.setName(username.value);
             sessionStore.setRole(response.data.role);
+            sessionStore.setAccountId(response.data.account_id);
             if (response.data.role == 'admin') {
                 push({ path: '/admin/dashboard' });
             } else {
