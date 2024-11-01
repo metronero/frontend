@@ -8,6 +8,8 @@ onMounted(() => {
     ProductService.getProducts().then((data) => (products.value = data));
 });
 
+const withdrawalAmount = ref('0');
+const sweepAll = ref(false);
 const toast = useToast();
 const dt = ref();
 const products = ref();
@@ -29,12 +31,6 @@ const statuses = ref([
 function formatCurrency(value) {
     if (value) return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
     return;
-}
-
-function openNew() {
-    product.value = {};
-    submitted.value = false;
-    productDialog.value = true;
 }
 
 function hideDialog() {
@@ -133,11 +129,25 @@ function getStatusLabel(status) {
 <template>
     <div>
         <div class="card">
-            <Toolbar class="mb-6">
-                <template #start>
-                    <Button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" @click="openNew" />
-                </template>
+            <h1 class="font-semibold text-2xl mb-5">Withdrawals</h1>
 
+            <h2 class="font-semibold text-xl mb-5">Initiate New</h2>
+
+            <div class="mb-10">
+                <div class="mb-5 flex flex-col">
+                    <label for="integeronly" class="font-bold block mb-2">Enter Amount</label>
+                    <div class="flex gap-5">
+                        <InputNumber v-if="sweepAll" v-model="withdrawalAmount" inputId="withdrawalAmount" suffix=" XMR" disabled />
+                        <InputNumber v-else v-model="withdrawalAmount" inputId="withdrawalAmount" suffix=" XMR" />
+                        <Checkbox size="large" v-model="sweepAll" inputId="sweepAll" binary />
+                        <label for="sweepAll">Sweep all</label>
+                    </div>
+                </div>
+                <Button type="submit" label="Submit" />
+            </div>
+            <h2 class="font-semibold text-xl mb-5">History</h2>
+
+            <Toolbar class="mb-6">
                 <template #end>
                     <Button label="Export" icon="pi pi-upload" severity="secondary" @click="exportCSV($event)" />
                 </template>
