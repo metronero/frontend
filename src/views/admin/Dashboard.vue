@@ -16,6 +16,7 @@ const instanceHealth = ref(true);
 const instanceVersion = ref('v0.0.0');
 const isLoading = ref(true);
 const recentInvoices = ref();
+const recentWithdrawals = ref();
 
 function getDashboardInfo() {
     isLoading.value = true;
@@ -79,6 +80,21 @@ function getDashboardInfo() {
             console.log(error);
             if (error.response) {
                 toast.add({ severity: 'error', summary: 'Failed to fetch merchant count', detail: error.response.data.message, life: 3000 });
+            } else {
+                toast.add({ severity: 'error', summary: error.message, detail: error.code, life: 3000 });
+            }
+        });
+
+    axios
+        .get(import.meta.env.VITE_API_BASE + '/admin/withdrawal/recent', { withCredentials: true })
+        .then((response) => {
+            console.log(response.data);
+            recentWithdrawals.value = response.data;
+        })
+        .catch((error) => {
+            console.log(error);
+            if (error.response) {
+                toast.add({ severity: 'error', summary: 'Failed to fetch recent withdrawals', detail: error.response.data.message, life: 3000 });
             } else {
                 toast.add({ severity: 'error', summary: error.message, detail: error.code, life: 3000 });
             }
@@ -203,8 +219,8 @@ onMounted(() => {
                 </DataTable>
                 <div class="flex items-center justify-center align-center" v-else>
                     <div class="text-center">
-                        <p class="mb-4">Nothing yet. Create an invoice to get started.</p>
-                        <Button as="router-link" to="/merchant/invoices">Go to Invoices</Button>
+                        <p class="mb-4">Nothing yet. Get a merchant to create an invoice.</p>
+                        <Button as="router-link" to="/admin/merchants">Go to Merchants</Button>
                     </div>
                 </div>
             </div>
@@ -212,14 +228,20 @@ onMounted(() => {
         <div class="col-span-12 xl:col-span-6">
             <div class="card">
                 <div class="font-semibold text-xl mb-4">Recent Withdrawals</div>
-                <DataTable :value="products" :rows="5" :paginator="true" responsiveLayout="scroll">
-                    <Column field="name" header="Name" :sortable="true" style="width: 35%"></Column>
-                    <Column field="price" header="Price" :sortable="true" style="width: 35%">
-                        <template #body="slotProps">
-                            {{ formatCurrency(slotProps.data.price) }}
-                        </template>
+                <DataTable v-if="recentWithdrawals" :value="recentWithdrawals" :rows="5" :paginator="true" responsiveLayout="scroll">
+                    <Column field="withdrawal_id" header="ID" :sortable="true"></Column>
+                    <Column field="amount" header="Amount" :sortable="true">
+                        <template #body="slotProps"> {{ piconerosToMonero(slotProps.data.amount) }} XMR </template>
                     </Column>
+                    <Column field="address" header="Address" :sortable="true"></Column>
+                    <Column field="date" header="Date" :sortable="true"></Column>
                 </DataTable>
+                <div class="flex items-center justify-center align-center" v-else>
+                    <div class="text-center">
+                        <p class="mb-4">Nothing yet. Withdraw some funds to get started.</p>
+                        <Button as="router-link" to="/admin/withdrawals">Go to Withdrawals</Button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

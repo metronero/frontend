@@ -4,7 +4,7 @@ import { useToast } from 'primevue/usetoast';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-const apiKeys = ref([]);
+const apiKeys = ref([]); // Ensure apiKeys is always an array
 const deleteApiKeysDialog = ref(false);
 const showApiKeyDialog = ref(false);
 const newApiKey = ref(''); // Holds the one-time display key
@@ -19,7 +19,7 @@ onMounted(() => {
 const fetchApiKeys = async () => {
     try {
         const response = await axios.get(import.meta.env.VITE_API_BASE + '/merchant/apikey', { withCredentials: true });
-        apiKeys.value = response.data;
+        apiKeys.value = response.data || []; // Ensure the response data is set as an array
     } catch (error) {
         if (error.response && error.response.status === 401) {
             toast.add({ severity: 'error', summary: 'Not logged in', detail: error.code, life: 3000 });
@@ -37,9 +37,11 @@ const createApiKey = async () => {
         newApiKey.value = response.data?.key || '';
         const newKeyEntry = { key_id: response.data.key_id, expiry: response.data.expiry };
 
+        // Ensure apiKeys is an array before pushing
+        if (!apiKeys.value) apiKeys.value = [];
         apiKeys.value.push(newKeyEntry);
-        showApiKeyDialog.value = true;
 
+        showApiKeyDialog.value = true;
         toast.add({ severity: 'success', summary: 'API Key Created', detail: 'New API key generated', life: 3000 });
     } catch (error) {
         toast.add({ severity: 'error', summary: 'API Key Creation Failed', detail: error.response?.data?.message || error.message, life: 3000 });

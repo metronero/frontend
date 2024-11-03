@@ -66,6 +66,7 @@ function exportCSV() {
             </Toolbar>
 
             <DataTable
+                v-if="invoices"
                 ref="dt"
                 v-model:selection="selectedInvoices"
                 :value="invoices"
@@ -103,6 +104,12 @@ function exportCSV() {
                     </template>
                 </Column>
             </DataTable>
+            <div class="flex items-center justify-center align-center" v-else>
+                <div class="text-center">
+                    <p class="mb-4">Nothing yet. Get a merchant to create an invoice.</p>
+                    <Button as="router-link" to="/admin/merchants">Go to Merchants</Button>
+                </div>
+            </div>
         </div>
 
         <Dialog v-model:visible="deleteInvoiceDialog" :style="{ width: '450px' }" header="Confirm" :modal="true">

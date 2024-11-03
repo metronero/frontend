@@ -2,7 +2,7 @@
 import { FilterMatchMode } from '@primevue/core/api';
 import axios from 'axios';
 import { useToast } from 'primevue/usetoast';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 onMounted(() => {
@@ -22,6 +22,7 @@ const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS }
 });
 const submitted = ref(false);
+const isEditMode = computed(() => !!merchant.value.id);
 
 function getMerchants() {
     axios
@@ -55,27 +56,34 @@ function hideDialog() {
 function saveMerchant() {
     submitted.value = true;
 
-    if (merchant?.value.name?.trim()) {
-        if (merchant.value.id) {
-            merchants.value[findIndexById(merchant.value.id)] = merchant.value;
-            toast.add({ severity: 'success', summary: 'Successful', detail: 'Merchant Updated', life: 3000 });
+    // Check required fields based on whether it's an edit or create action
+    if (merchant.value.name?.trim() && (isEditMode.value || merchant.value.password)) {
+        if (isEditMode.value) {
+            axios
+                .post(import.meta.env.VITE_API_BASE + '/admin/merchant/' + merchant.value.id, { disabled: merchant.value.disabled }, { withCredentials: true })
+                .then(() => {
+                    merchants.value[findIndexById(merchant.value.id)] = merchant.value;
+                    toast.add({ severity: 'success', summary: 'Successful', detail: 'Merchant Updated', life: 3000 });
+                })
+                .catch((error) => {
+                    if (error.response) {
+                        toast.add({ severity: 'error', summary: 'Failed to update merchant', detail: error.response.data.message, life: 3000 });
+                    } else {
+                        toast.add({ severity: 'error', summary: error.message, detail: error.code, life: 3000 });
+                    }
+                });
         } else {
             axios
                 .post(import.meta.env.VITE_API_BASE + '/admin/register', { username: merchant.value.name, password: merchant.value.password, role: 'merchant' }, { withCredentials: true })
                 .then((response) => {
-                    console.log(response.data);
                     merchant.value.id = response.data.id;
-
-                    // Move this inside the .then block to ensure the ID is available
+                    merchant.value.password = '';
                     merchants.value.push(merchant.value);
                     toast.add({ severity: 'success', summary: 'Successful', detail: 'Merchant Created', life: 3000 });
-
-                    // Hide the dialog and reset the merchant object
                     merchantDialog.value = false;
                     merchant.value = {};
                 })
                 .catch((error) => {
-                    console.log(error);
                     if (error.response) {
                         toast.add({ severity: 'error', summary: 'Failed to fetch merchants', detail: error.response.data.message, life: 3000 });
                     } else {
@@ -83,17 +91,13 @@ function saveMerchant() {
                     }
                 });
         }
+        hideDialog();
     }
 }
 
 function editMerchant(m) {
     merchant.value = { ...m };
     merchantDialog.value = true;
-}
-
-function confirmDeleteMerchant(m) {
-    merchant.value = m;
-    deleteMerchantDialog.value = true;
 }
 
 function deleteMerchant() {
@@ -179,8 +183,7 @@ function deleteSelectedMerchants() {
                 </Column>
                 <Column :exportable="false" style="min-width: 12rem">
                     <template #body="slotProps">
-                        <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editMerchant(slotProps.data)" />
-                        <Button icon="pi pi-trash" outlined rounded severity="danger" @click="confirmDeleteMerchant(slotProps.data)" />
+                        <Button icon="pi pi-pencil" class="mr-2" @click="editMerchant(slotProps.data)" label="Edit" />
                     </template>
                 </Column>
             </DataTable>
@@ -188,15 +191,19 @@ function deleteSelectedMerchants() {
 
         <Dialog v-model:visible="merchantDialog" :style="{ width: '450px' }" header="Merchant Details" :modal="true">
             <div class="flex flex-col gap-6">
-                <div>
+                <div v-if="!isEditMode">
                     <label for="name" class="block font-bold mb-3">Name</label>
                     <InputText id="name" v-model.trim="merchant.name" required="true" autofocus :invalid="submitted && !merchant.name" fluid />
                     <small v-if="submitted && !merchant.name" class="text-red-500">Name is required.</small>
                 </div>
-                <div>
+                <div v-if="!isEditMode">
                     <label for="password" class="block font-bold mb-3">Password</label>
-                    <InputText id="name" v-model.trim="merchant.password" required="true" autofocus :invalid="submitted && !merchant.password" fluid />
+                    <InputText id="password" v-model.trim="merchant.password" autofocus :invalid="submitted && !merchant.password" fluid />
                     <small v-if="submitted && !merchant.password" class="text-red-500">Password is required.</small>
+                </div>
+                <div v-if="isEditMode">
+                    <Checkbox v-model="merchant.disabled" binary inputId="disabled" class="mr-2" />
+                    <label for="disabled">Disabled</label>
                 </div>
             </div>
 
