@@ -66,6 +66,11 @@ const router = createRouter({
                     path: '/merchant/apikeys',
                     name: 'merchant-apikeys',
                     component: () => import('@/views/merchant/ApiKeys.vue')
+                },
+                {
+                    path: '/merchant/pos-keypad',
+                    name: 'merchant-poskeypad',
+                    component: () => import('@/views/merchant/POSKeypad.vue')
                 }
             ]
         },

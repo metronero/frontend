@@ -81,6 +81,11 @@ const merchantMenu = ref([
         ]
     },
     {
+        label: 'PoS',
+        items: [{ label: 'Keypad', icon: 'pi pi-fw pi-calculator', to: '/merchant/pos-keypad' }]
+    },
+
+    {
         label: 'Support',
         items: [
             { label: 'Documentation', icon: 'pi pi-fw pi-book', url: 'https://metronero.moneropay.eu', target: '_blank' },
