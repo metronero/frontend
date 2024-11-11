@@ -1,15 +1,12 @@
 <script setup lang="js">
 import { ref } from 'vue';
 
-const selectedCurrency = ref({ name: 'EUR', code: 'de-DE' });
-const currencies = ref([
-    { name: 'EUR', code: 'de-DE' },
-    { name: 'USD', code: 'en-US' },
-    { name: 'TRY', code: 'tr-TR' },
-    { name: 'XMR', code: 'XMR' }
-]);
+// Define the currencies with currency symbols in the 'code' field
+const selectedCurrency = ref('EUR');
+const currencies = ref(['XMR', 'EUR', 'USD']);
+
 const amount = ref(0);
-const amountString = ref(''); // Track the amount as a string for precise cent handling
+const amountString = ref(''); // Track the amount as a string for precise handling
 
 // Function to handle button click and add digit
 function addDigit(digit) {
@@ -18,18 +15,38 @@ function addDigit(digit) {
 
     // Append digit to the amount string
     amountString.value += digit;
-
-    // Convert the string to a float with cents precision
-    const numericAmount = parseFloat(amountString.value) / 100;
-
-    // Update the display amount
-    amount.value = numericAmount;
+    updateAmountValue();
 }
 
-// Function to clear the amount
+// Function to add two zeros
+function addDoubleZero() {
+    if (amountString.value.length + 2 > 10) return; // Ensure we don't exceed max length
+    amountString.value += '00';
+    updateAmountValue();
+}
+
+// Function to handle decimal point input
+function addDecimal() {
+    if (!amountString.value.includes('.')) {
+        amountString.value += '.';
+    }
+}
+
+// Function to clear the amount (used by the "times-circle" button)
 function clearAmount() {
     amountString.value = '';
     amount.value = 0;
+}
+
+// Function to delete the last character (used by the "delete-left" button)
+function deleteLastChar() {
+    amountString.value = amountString.value.slice(0, -1);
+    updateAmountValue();
+}
+
+// Function to update the numeric amount based on the amountString
+function updateAmountValue() {
+    amount.value = parseFloat(amountString.value) || 0;
 }
 
 // Function to handle "Enter" action
@@ -46,11 +63,9 @@ function enterAmount() {
                 <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
                     <div class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20" style="border-radius: 53px">
                         <div class="mb-5 flex gap-4">
-                            <!-- Conditional currency display for XMR or others -->
-                            <InputNumber v-if="selectedCurrency.name != 'XMR'" v-model="amount" mode="currency" :currency="selectedCurrency.name" :locale="selectedCurrency.code" size="large" fluid></InputNumber>
-                            <InputNumber v-else v-model="amount" suffix=" ɱ" size="large" :minFractionDigits="4" fluid></InputNumber>
-
-                            <Select size="large" optionLabel="name" v-model="selectedCurrency" :options="currencies"></Select>
+                            <!-- InputText to display amount with selected currency symbol as suffix -->
+                            <InputText v-model="amountString" size="large" fluid readonly></InputText>
+                            <Select size="large" v-model="selectedCurrency" :options="currencies"></Select>
                         </div>
                         <div class="grid grid-cols-3 gap-4 !text-2xl">
                             <Button size="large" label="1" @click="addDigit(1)"></Button>
@@ -62,9 +77,12 @@ function enterAmount() {
                             <Button size="large" label="7" @click="addDigit(7)"></Button>
                             <Button size="large" label="8" @click="addDigit(8)"></Button>
                             <Button size="large" label="9" @click="addDigit(9)"></Button>
-                            <Button size="large" severity="danger" label="CLR" @click="clearAmount"></Button>
+                            <Button size="large" label="00" @click="addDoubleZero"></Button>
                             <Button size="large" label="0" @click="addDigit(0)"></Button>
-                            <Button size="large" severity="success" label="ENTER" @click="enterAmount"></Button>
+                            <Button size="large" label="." @click="addDecimal"></Button>
+                            <Button size="large" severity="danger" icon="pi pi-times-circle text-2xl" label=" " @click="clearAmount"></Button>
+                            <Button size="large" severity="info" icon="pi pi-delete-left text-2xl" label=" " @click="deleteLastChar"></Button>
+                            <Button size="large" severity="success" icon="pi pi-arrow-right text-2xl" label=" " @click="enterAmount"></Button>
                         </div>
                     </div>
                 </div>
