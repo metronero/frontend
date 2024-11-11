@@ -1,58 +1,133 @@
 <script setup lang="js">
+import axios from 'axios';
+import { useToast } from 'primevue/usetoast';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-// Define the currencies with currency symbols in the 'code' field
-const selectedCurrency = ref('EUR');
+// Define currencies
+const selectedCurrency = ref('XMR');
 const currencies = ref(['XMR', 'EUR', 'USD']);
+const exchangeRate = ref(1); // Exchange rate for fiat to XMR conversion
+const amount = ref(0); // Amount in the selected currency
+const amountString = ref(''); // Track the amount as a string
+const toast = useToast();
+const { push } = useRouter();
 
-const amount = ref(0);
-const amountString = ref(''); // Track the amount as a string for precise handling
+// Invoice data
+const invoice = ref({
+    amount: 0,
+    order_id: '',
+    accept_url: window.location.href,
+    cancel_url: window.location.href
+});
 
-// Function to handle button click and add digit
+// Convert amount in XMR to piconeros (1 XMR = 1e12 piconeros)
+function convertToPiconeros(xmrAmount) {
+    return Math.round(xmrAmount * 1e12);
+}
+
+function fetchExchangeRate() {
+    if (selectedCurrency.value === 'XMR') {
+        exchangeRate.value = 1; // XMR to XMR rate is 1
+    } else {
+        // Use a synchronous approach with a promise
+        return axios
+            .get(`${import.meta.env.VITE_API_BASE}/merchant/fiatrate/${selectedCurrency.value}`, { withCredentials: true })
+            .then((response) => {
+                exchangeRate.value = response.data.price;
+            })
+            .catch((error) => {
+                if (error.response?.status === 401) {
+                    toast.add({ severity: 'error', summary: 'Not logged in', detail: error.code, life: 3000 });
+                    push({ path: '/auth/login' });
+                } else {
+                    console.error(`Failed to fetch exchange rate for ${selectedCurrency.value}:`, error);
+                    toast.add({ severity: 'error', summary: 'Exchange Rate Error', detail: 'Could not fetch exchange rate.', life: 3000 });
+                }
+            });
+    }
+}
+
+// Generate a random order_id for the invoice
+function generateOrderId() {
+    return 'POS' + Math.random().toString(36).substr(2, 6).toUpperCase();
+}
+
+// Functions to handle number pad input for the amount
 function addDigit(digit) {
-    // Limit maximum number length for practicality (e.g., 10 digits)
-    if (amountString.value.length >= 10) return;
+    if (amountString.value.length >= 10) return; // Limit max length
 
-    // Append digit to the amount string
     amountString.value += digit;
     updateAmountValue();
 }
 
-// Function to add two zeros
 function addDoubleZero() {
-    if (amountString.value.length + 2 > 10) return; // Ensure we don't exceed max length
+    if (amountString.value.length + 2 > 10) return; // Check max length
     amountString.value += '00';
     updateAmountValue();
 }
 
-// Function to handle decimal point input
 function addDecimal() {
     if (!amountString.value.includes('.')) {
         amountString.value += '.';
     }
 }
 
-// Function to clear the amount (used by the "times-circle" button)
 function clearAmount() {
     amountString.value = '';
     amount.value = 0;
 }
 
-// Function to delete the last character (used by the "delete-left" button)
 function deleteLastChar() {
     amountString.value = amountString.value.slice(0, -1);
     updateAmountValue();
 }
 
-// Function to update the numeric amount based on the amountString
+// Update numeric amount based on amountString (input from number pad)
 function updateAmountValue() {
     amount.value = parseFloat(amountString.value) || 0;
 }
 
-// Function to handle "Enter" action
+// Create an invoice when the Enter button is clicked
 function enterAmount() {
-    console.log('Amount entered:', amount.value);
-    // Additional logic for "ENTER" action can be added here
+    // Calculate the XMR equivalent using the exchange rate and convert to piconeros
+    fetchExchangeRate()
+        .then(() => {
+            const xmrAmount = amount.value / exchangeRate.value; // Convert fiat to XMR if needed
+            invoice.value.amount = convertToPiconeros(xmrAmount); // Convert XMR to piconeros
+            console.log('amount=', amount.value, ' rate=', exchangeRate.value, ' xmr=', xmrAmount, ' pico', invoice.value.amount);
+
+            invoice.value.order_id = generateOrderId();
+
+            // Create the invoice
+            return axios.post(
+                `${import.meta.env.VITE_API_BASE}/merchant/invoice`,
+                {
+                    amount: invoice.value.amount,
+                    order_id: invoice.value.order_id,
+                    accept_url: invoice.value.accept_url,
+                    cancel_url: invoice.value.cancel_url
+                },
+                { withCredentials: true }
+            );
+        })
+        .then((response) => {
+            // Redirect to the newly created invoice page
+            window.location.href = `${import.meta.env.VITE_API_BASE}/p/page/${response.data.invoice_id}`;
+        })
+        .catch((error) => {
+            if (error.response?.status === 401) {
+                toast.add({ severity: 'error', summary: 'Not logged in', detail: error.code, life: 3000 });
+                push({ path: '/auth/login' });
+            } else {
+                toast.add({
+                    severity: 'error',
+                    summary: 'Failed to create invoice',
+                    detail: error.message,
+                    life: 3000
+                });
+            }
+        });
 }
 </script>
 
@@ -64,7 +139,7 @@ function enterAmount() {
                     <div class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20" style="border-radius: 53px">
                         <div class="mb-5 flex gap-4">
                             <!-- InputText to display amount with selected currency symbol as suffix -->
-                            <InputText v-model="amountString" size="large" fluid readonly></InputText>
+                            <InputText v-model="amountString" size="large" :suffix="selectedCurrency" fluid readonly></InputText>
                             <Select size="large" v-model="selectedCurrency" :options="currencies"></Select>
                         </div>
                         <div class="grid grid-cols-3 gap-4 !text-2xl">

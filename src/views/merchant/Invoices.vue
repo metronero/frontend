@@ -23,6 +23,17 @@ onMounted(() => {
     getInvoices();
 });
 
+function piconerosToMonero(piconeros) {
+    // Define the conversion factor: 1 Monero = 10^12 piconeros
+    const PICONEROS_IN_MONERO = 1e12;
+
+    // Convert piconeros to Monero (float)
+    const monero = piconeros / PICONEROS_IN_MONERO;
+
+    // Return the result as a fixed precision string, e.g., 5 decimal places
+    return monero.toFixed(5); // Adjust precision as needed
+}
+
 function getInvoices() {
     axios
         .get(import.meta.env.VITE_API_BASE + '/merchant/invoice', { withCredentials: true })
@@ -144,7 +155,9 @@ function exportCSV() {
 
                 <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
                 <Column field="invoice_id" header="Invoice ID" sortable style="min-width: 14rem"></Column>
-                <Column field="amount" header="Amount" sortable style="min-width: 12rem"></Column>
+                <Column field="amount" header="Amount" sortable style="min-width: 12rem">
+                    <template #body="slotProps"> {{ piconerosToMonero(slotProps.data.amount) }} XMR</template></Column
+                >
                 <Column field="order_id" header="Order ID" sortable style="min-width: 12rem"></Column>
                 <Column field="status" header="Status" sortable style="min-width: 10rem">
                     <template #body="slotProps">

@@ -152,9 +152,7 @@ onMounted(() => {
                 <DataTable v-if="recentInvoices" :value="recentInvoices" :rows="5" :paginator="true" responsiveLayout="scroll">
                     <Column field="invoice_id" header="Invoice ID" :sortable="true"></Column>
                     <Column header="Amount" :sortable="true">
-                        <template #body="slotProps">
-                            {{ piconerosToMonero(slotProps.data.amount) }}
-                        </template>
+                        <template #body="slotProps"> {{ piconerosToMonero(slotProps.data.amount) }} XMR </template>
                     </Column>
                     <Column field="order_id" header="Order ID" :sortable="true"></Column>
                     <Column field="status" header="Status" :sortable="true">
