@@ -23,6 +23,10 @@ onMounted(() => {
     getInvoices();
 });
 
+function convertToPiconeros(xmrAmount) {
+    return Math.round(xmrAmount * 1e12);
+}
+
 function piconerosToMonero(piconeros) {
     // Define the conversion factor: 1 Monero = 10^12 piconeros
     const PICONEROS_IN_MONERO = 1e12;
@@ -70,7 +74,7 @@ function saveInvoice() {
             .post(
                 import.meta.env.VITE_API_BASE + '/merchant/invoice',
                 {
-                    amount: invoice.value.amount,
+                    amount: convertToPiconeros(invoice.value.amount),
                     order_id: invoice.value.order_id,
                     accept_url: invoice.value.accept_url,
                     cancel_url: invoice.value.cancel_url,
@@ -81,10 +85,12 @@ function saveInvoice() {
             )
             .then((response) => {
                 invoice.value.invoice_id = response.data.invoice_id;
-                invoices.value.push(invoice.value); // Now this works without null errors
+                invoice.value.status = 'Pending';
+                invoice.value.last_update = getCurrentDateAsISOString();
+                invoices.value.unshift(invoice.value);
                 toast.add({ severity: 'success', summary: 'Successful', detail: 'Invoice Created', life: 3000 });
                 invoiceDialog.value = false;
-                invoice.value = {}; // Reset the form
+                invoice.value = {};
             })
             .catch((error) => {
                 toast.add({ severity: 'error', summary: 'Failed to create invoice', detail: error.message, life: 3000 });
@@ -103,8 +109,23 @@ function deleteInvoice() {
     toast.add({ severity: 'success', summary: 'Successful', detail: 'Invoice Deleted', life: 3000 });
 }
 
+function formatDate(dateString) {
+    // Create a new Date object from the ISO string
+    const date = new Date(dateString);
+
+    // Extract components (year, month, day, hours, minutes)
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is zero-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    // Return the formatted date as "YYYY-MM-DD HH:MM"
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
+
 function copyLinkToClipboard(invoiceId) {
-    const link = `${apiBaseUrl}/p/${invoiceId}`;
+    const link = `${apiBaseUrl}/p/page/${invoiceId}`;
     navigator.clipboard
         .writeText(link)
         .then(() => {
@@ -115,6 +136,10 @@ function copyLinkToClipboard(invoiceId) {
         });
 }
 
+function getCurrentDateAsISOString() {
+    const date = new Date();
+    return date.toISOString();
+}
 function exportCSV() {
     dt.value.exportCSV();
 }
@@ -154,21 +179,27 @@ function exportCSV() {
                 </template>
 
                 <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
-                <Column field="invoice_id" header="Invoice ID" sortable style="min-width: 14rem"></Column>
-                <Column field="amount" header="Amount" sortable style="min-width: 12rem">
+                <Column field="invoice_id" header="Invoice ID" sortable></Column>
+                <Column field="amount" header="Amount" sortable>
                     <template #body="slotProps"> {{ piconerosToMonero(slotProps.data.amount) }} XMR</template></Column
                 >
-                <Column field="order_id" header="Order ID" sortable style="min-width: 12rem"></Column>
-                <Column field="status" header="Status" sortable style="min-width: 10rem">
+                <Column field="order_id" header="Order ID" sortable></Column>
+                <Column field="status" header="Status" sortable>
                     <template #body="slotProps">
                         <Tag v-if="slotProps.data.status === 'Completed'" value="Finished" severity="success" />
-                        <Tag v-else-if="slotProps.data.status === 'Pending'" value="Pending" severity="warning" />
+                        <Tag v-else-if="slotProps.data.status === 'Pending'" value="Pending" severity="info" />
+                        <Tag v-else-if="slotProps.data.status === 'Partial'" value="Partial" severity="warning" />
                         <Tag v-else-if="slotProps.data.status === 'Cancelled'" value="Cancelled" severity="danger" />
+                        <Tag v-else-if="slotProps.data.status === 'Expired'" value="Expired" severity="danger" />
                         <Tag v-else value="Other" severity="info" />
                     </template>
                 </Column>
-                <Column field="last_update" header="Last Update" sortable style="min-width: 12rem"></Column>
-                <Column header="Page Link" :exportable="false" style="min-width: 10rem">
+                <Column field="last_update" header="Last Update" sortable>
+                    <template #body="slotProps">
+                        {{ formatDate(slotProps.data.last_update) }}
+                    </template>
+                </Column>
+                <Column header="Page Link" :exportable="false">
                     <template #body="slotProps"> <Button icon="pi pi-copy" label="Copy Link" @click="copyLinkToClipboard(slotProps.data.invoice_id)" /> </template>
                 </Column>
             </DataTable>

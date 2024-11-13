@@ -129,6 +129,35 @@ function piconerosToMonero(piconeros) {
     return monero.toFixed(5); // Adjust precision as needed
 }
 
+function copyAddress(address) {
+    navigator.clipboard
+        .writeText(address)
+        .then(() => {
+            // Show toast notification
+            toast.add({ severity: 'success', summary: 'Address Copied', detail: 'Address copied to clipboard', life: 2000 });
+        })
+        .catch((err) => {
+            // Handle any errors with copying
+            console.error('Failed to copy: ', err);
+            toast.add({ severity: 'error', summary: 'Copy Failed', detail: 'Could not copy address', life: 2000 });
+        });
+}
+
+function formatDate(dateString) {
+    // Create a new Date object from the ISO string
+    const date = new Date(dateString);
+
+    // Extract components (year, month, day, hours, minutes)
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is zero-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    // Return the formatted date as "YYYY-MM-DD HH:MM"
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
+
 onMounted(() => {
     getDashboardInfo();
 });
@@ -207,15 +236,26 @@ onMounted(() => {
             <div class="card">
                 <div class="font-semibold text-xl mb-4">Recent Invoices</div>
                 <DataTable v-if="recentInvoices" :value="recentInvoices" :rows="5" :paginator="true" responsiveLayout="scroll">
-                    <Column field="invoice_id" header="Invoice ID" :sortable="true"></Column>
+                    <Column field="merchant_name" header="Merchant" sortable></Column>
                     <Column header="Amount" :sortable="true">
-                        <template #body="slotProps">
-                            {{ piconerosToMonero(slotProps.data.amount) }}
-                        </template>
+                        <template #body="slotProps"> {{ piconerosToMonero(slotProps.data.amount) }} XMR</template>
                     </Column>
                     <Column field="order_id" header="Order ID" :sortable="true"></Column>
-                    <Column field="status" header="Status" :sortable="true"></Column>
-                    <Column field="last_update" header="Last Update" :sortable="true"></Column>
+                    <Column field="status" header="Status" sortable>
+                        <template #body="slotProps">
+                            <Tag v-if="slotProps.data.status === 'Completed'" value="Finished" severity="success" />
+                            <Tag v-else-if="slotProps.data.status === 'Pending'" value="Pending" severity="info" />
+                            <Tag v-else-if="slotProps.data.status === 'Partial'" value="Partial" severity="warning" />
+                            <Tag v-else-if="slotProps.data.status === 'Cancelled'" value="Cancelled" severity="danger" />
+                            <Tag v-else-if="slotProps.data.status === 'Expired'" value="Expired" severity="danger" />
+                            <Tag v-else value="Other" severity="info" />
+                        </template>
+                    </Column>
+                    <Column field="last_update" header="Last Update" sortable>
+                        <template #body="slotProps">
+                            {{ formatDate(slotProps.data.last_update) }}
+                        </template>
+                    </Column>
                 </DataTable>
                 <div class="flex items-center justify-center align-center" v-else>
                     <div class="text-center">
@@ -229,12 +269,17 @@ onMounted(() => {
             <div class="card">
                 <div class="font-semibold text-xl mb-4">Recent Withdrawals</div>
                 <DataTable v-if="recentWithdrawals" :value="recentWithdrawals" :rows="5" :paginator="true" responsiveLayout="scroll">
-                    <Column field="withdrawal_id" header="ID" :sortable="true"></Column>
                     <Column field="amount" header="Amount" :sortable="true">
                         <template #body="slotProps"> {{ piconerosToMonero(slotProps.data.amount) }} XMR </template>
                     </Column>
-                    <Column field="address" header="Address" :sortable="true"></Column>
-                    <Column field="date" header="Date" :sortable="true"></Column>
+                    <Column field="address" header="Address" :sortable="true">
+                        <template #body="slotProps"> {{ slotProps.data.address.slice(0, 10) }}... <Button icon="pi pi-copy" text @click="copyAddress(slotProps.data.address)" /> </template>
+                    </Column>
+                    <Column field="date" header="Date" sortable>
+                        <template #body="slotProps">
+                            {{ formatDate(slotProps.data.date) }}
+                        </template>
+                    </Column>
                 </DataTable>
                 <div class="flex items-center justify-center align-center" v-else>
                     <div class="text-center">

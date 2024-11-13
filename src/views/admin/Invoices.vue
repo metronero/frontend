@@ -51,6 +51,32 @@ function deleteInvoice() {
 function exportCSV() {
     dt.value.exportCSV();
 }
+
+function formatDate(dateString) {
+    // Create a new Date object from the ISO string
+    const date = new Date(dateString);
+
+    // Extract components (year, month, day, hours, minutes)
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is zero-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    // Return the formatted date as "YYYY-MM-DD HH:MM"
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
+
+function piconerosToMonero(piconeros) {
+    // Define the conversion factor: 1 Monero = 10^12 piconeros
+    const PICONEROS_IN_MONERO = 1e12;
+
+    // Convert piconeros to Monero (float)
+    const monero = piconeros / PICONEROS_IN_MONERO;
+
+    // Return the result as a fixed precision string, e.g., 5 decimal places
+    return monero.toFixed(5); // Adjust precision as needed
+}
 </script>
 
 <template>
@@ -86,21 +112,30 @@ function exportCSV() {
                 </template>
 
                 <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
-                <Column field="invoice_id" header="Invoice ID" sortable style="min-width: 14rem"></Column>
-                <Column field="amount" header="Amount" sortable style="min-width: 12rem"></Column>
-                <Column field="order_id" header="Order ID" sortable style="min-width: 12rem"></Column>
-                <Column field="status" header="Status" sortable style="min-width: 10rem">
+                <Column field="invoice_id" header="Invoice ID" sortable></Column>
+                <Column field="merchant_name" header="Merchant" sortable></Column>
+                <Column header="Amount" :sortable="true">
+                    <template #body="slotProps"> {{ piconerosToMonero(slotProps.data.amount) }} XMR</template>
+                </Column>
+                <Column field="order_id" header="Order ID" sortable></Column>
+                <Column field="status" header="Status" sortable>
                     <template #body="slotProps">
-                        <Tag v-if="slotProps.data.status === 'finished'" value="Finished" severity="success" />
-                        <Tag v-else-if="slotProps.data.status === 'Pending'" value="Pending" severity="warning" />
+                        <Tag v-if="slotProps.data.status === 'Completed'" value="Finished" severity="success" />
+                        <Tag v-else-if="slotProps.data.status === 'Pending'" value="Pending" severity="info" />
+                        <Tag v-else-if="slotProps.data.status === 'Partial'" value="Partial" severity="warning" />
                         <Tag v-else-if="slotProps.data.status === 'Cancelled'" value="Cancelled" severity="danger" />
+                        <Tag v-else-if="slotProps.data.status === 'Expired'" value="Expired" severity="danger" />
                         <Tag v-else value="Other" severity="info" />
                     </template>
                 </Column>
-                <Column field="last_update" header="Last Update" sortable style="min-width: 12rem"></Column>
-                <Column header="Page Link" :exportable="false" style="min-width: 10rem">
+                <Column field="last_update" header="Last Update" sortable>
                     <template #body="slotProps">
-                        <Button icon="pi pi-link" outlined rounded severity="success" as="a" :href="apiBaseUrl + '/p/' + slotProps.data.invoice_id" />
+                        {{ formatDate(slotProps.data.last_update) }}
+                    </template>
+                </Column>
+                <Column header="Page Link" :exportable="false">
+                    <template #body="slotProps">
+                        <Button icon="pi pi-link" outlined rounded severity="success" as="a" :href="apiBaseUrl + '/p/page/' + slotProps.data.invoice_id" />
                     </template>
                 </Column>
             </DataTable>

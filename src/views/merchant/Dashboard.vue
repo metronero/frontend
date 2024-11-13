@@ -69,6 +69,21 @@ function getDashboardInfo() {
         .finally(() => (isLoading.value = false));
 }
 
+function formatDate(dateString) {
+    // Create a new Date object from the ISO string
+    const date = new Date(dateString);
+
+    // Extract components (year, month, day, hours, minutes)
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is zero-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    // Return the formatted date as "YYYY-MM-DD HH:MM"
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
+
 function piconerosToMonero(piconeros) {
     // Define the conversion factor: 1 Monero = 10^12 piconeros
     const PICONEROS_IN_MONERO = 1e12;
@@ -158,12 +173,18 @@ onMounted(() => {
                     <Column field="status" header="Status" :sortable="true">
                         <template #body="slotProps">
                             <Tag v-if="slotProps.data.status === 'Completed'" value="Finished" severity="success" />
-                            <Tag v-else-if="slotProps.data.status === 'Pending'" value="Pending" severity="warning" />
+                            <Tag v-else-if="slotProps.data.status === 'Pending'" value="Pending" severity="info" />
+                            <Tag v-else-if="slotProps.data.status === 'Partial'" value="Partial" severity="warning" />
                             <Tag v-else-if="slotProps.data.status === 'Cancelled'" value="Cancelled" severity="danger" />
+                            <Tag v-else-if="slotProps.data.status === 'Expired'" value="Expired" severity="danger" />
                             <Tag v-else value="Other" severity="info" />
                         </template>
                     </Column>
-                    <Column field="last_update" header="Last Update" :sortable="true"></Column>
+                    <Column field="last_update" header="Last Update" sortable>
+                        <template #body="slotProps">
+                            {{ formatDate(slotProps.data.last_update) }}
+                        </template>
+                    </Column>
                 </DataTable>
                 <div class="flex items-center justify-center align-center" v-else>
                     <div class="text-center">

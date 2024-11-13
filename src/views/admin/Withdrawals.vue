@@ -15,6 +15,20 @@ onMounted(() => {
     getWithdrawals();
 });
 
+function copyAddress(address) {
+    navigator.clipboard
+        .writeText(address)
+        .then(() => {
+            // Show toast notification
+            toast.add({ severity: 'success', summary: 'Address Copied', detail: 'Address copied to clipboard', life: 2000 });
+        })
+        .catch((err) => {
+            // Handle any errors with copying
+            console.error('Failed to copy: ', err);
+            toast.add({ severity: 'error', summary: 'Copy Failed', detail: 'Could not copy address', life: 2000 });
+        });
+}
+
 function piconerosToMonero(piconeros) {
     // Define the conversion factor: 1 Monero = 10^12 piconeros
     const PICONEROS_IN_MONERO = 1e12;
@@ -100,6 +114,20 @@ async function submitWithdrawal() {
         toast.add({ severity: 'error', summary: 'Withdrawal Failed', detail: message, life: 3000 });
     }
 }
+function formatDate(dateString) {
+    // Create a new Date object from the ISO string
+    const date = new Date(dateString);
+
+    // Extract components (year, month, day, hours, minutes)
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is zero-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    // Return the formatted date as "YYYY-MM-DD HH:MM"
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
 </script>
 
 <template>
@@ -143,8 +171,14 @@ async function submitWithdrawal() {
                 <Column field="amount" header="Amount" :sortable="true">
                     <template #body="slotProps"> {{ piconerosToMonero(slotProps.data.amount) }} XMR</template>
                 </Column>
-                <Column field="address" header="Address" :sortable="true"></Column>
-                <Column field="date" header="Date" :sortable="true"></Column>
+                <Column field="address" header="Address" :sortable="true">
+                    <template #body="slotProps"> {{ slotProps.data.address.slice(0, 10) }}... <Button icon="pi pi-copy" text @click="copyAddress(slotProps.data.address)" /> </template>
+                </Column>
+                <Column field="date" header="Date" sortable>
+                    <template #body="slotProps">
+                        {{ formatDate(slotProps.data.date) }}
+                    </template>
+                </Column>
             </DataTable>
 
             <!-- Display message when there are no withdrawals -->

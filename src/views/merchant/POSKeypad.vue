@@ -139,7 +139,7 @@ function enterAmount() {
                     <div class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20" style="border-radius: 53px">
                         <div class="mb-5 flex gap-4">
                             <!-- InputText to display amount with selected currency symbol as suffix -->
-                            <InputText v-model="amountString" size="large" :suffix="selectedCurrency" fluid readonly></InputText>
+                            <InputText v-model="amountString" size="large" :suffix="selectedCurrency" fluid></InputText>
                             <Select size="large" v-model="selectedCurrency" :options="currencies"></Select>
                         </div>
                         <div class="grid grid-cols-3 gap-4 !text-2xl">
