@@ -198,7 +198,7 @@ function deleteSelectedMerchants() {
                 </div>
                 <div v-if="!isEditMode">
                     <label for="password" class="block font-bold mb-3">Password</label>
-                    <InputText id="password" v-model.trim="merchant.password" autofocus :invalid="submitted && !merchant.password" fluid />
+                    <Password id="password" v-model.trim="merchant.password" autofocus :invalid="submitted && !merchant.password" fluid />
                     <small v-if="submitted && !merchant.password" class="text-red-500">Password is required.</small>
                 </div>
                 <div v-if="isEditMode">
